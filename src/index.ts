@@ -32,10 +32,10 @@ io.on('connection', async (socket: Socket) => {
     })
     const getUsers = await listDonut.get()
     const findDonut = getUsers.find((user: number) => user === id)
-    data.donut = findDonut ? true : false;
 
     const options: TOptionsUser = {
       ...data,
+      donut: findDonut ? true : false,
     }
     console.clear()
     console.log(options)

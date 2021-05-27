@@ -6,7 +6,6 @@ class Donut {
   private _DateLastFetching: number;
   private _Vk: VK;
   private _List: number[];
-  
 
   constructor(vk: VK) {
     this._DateLastFetching = 1;

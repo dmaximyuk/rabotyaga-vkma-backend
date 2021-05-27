@@ -2,9 +2,7 @@ export default (id: number) => {
   return {
     id: id,
     exp: 0,
-    donut: false,
     balance: 1000,
-    donate: 0,
     bonus: 0,
     transfer: 0,
     business: {
@@ -16,6 +14,5 @@ export default (id: number) => {
       job: 0,
       payback: 0,
     },
-    entGames: 0,
   };
 };

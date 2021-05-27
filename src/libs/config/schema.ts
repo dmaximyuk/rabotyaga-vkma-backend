@@ -1,11 +1,9 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const SaveUser = new mongoose.Schema({
   id: Number,
   exp: Number,
-  donut: Boolean,
   balance: Number,
-  donate: Number,
   bonus: Number,
   transfer: Number,
   business: {
