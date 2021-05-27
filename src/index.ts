@@ -32,15 +32,13 @@ io.on('connection', async (socket: Socket) => {
     })
     const getUsers = await listDonut.get()
     const findDonut = getUsers.find((user: number) => user === id)
-    const checkDonut = findDonut ? true : false;
-    data.donut = checkDonut;
+    data.donut = findDonut ? true : false;
 
     const options: TOptionsUser = {
       ...data,
     }
 
     console.log(options)
-    // console.log(options)
     // listUser.addUser(new User(socket, options));
   } else { 
     console.log("No user VKMA");

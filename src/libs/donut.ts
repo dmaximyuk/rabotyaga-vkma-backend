@@ -8,15 +8,13 @@ class Donut {
   private _list: number[];
 
   constructor(vk: VK) {
-    this._DateLastFetching = Date.now();
+    this._DateLastFetching = 1;
     this._vk = vk;
     this._list = [];
-    
-    this.get("FIRST_START");
   }
 
-  get = (type?: string) => {
-    if (type === "FIRST_START" || tForm.minutes(this._DateLastFetching)  >= 10) return this.fetchingDonuts();
+  get = async () => {
+    if (this._DateLastFetching === 1 || tForm.minutes(this._DateLastFetching)  >= 10) return await this.fetchingDonuts();
     return this._list
   };
 
@@ -32,7 +30,7 @@ class Donut {
 
     this._DateLastFetching = Date.now();
     this._list = arr;
-    return this._list;
+    return arr;
   };
 
   getDonuts = (offset?: number) => this._vk.api.groups.getMembers({
