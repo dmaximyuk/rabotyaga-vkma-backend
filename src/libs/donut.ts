@@ -20,30 +20,20 @@ class Donut {
     return this._list
   };
 
-  fetchingDonuts = () => this.getDonuts().then((data: any) => {
+  fetchingDonuts = async () => {
     const arr: number[] = [];
-    const factory = Math.floor(data.count / 1000);
-
-    if (data.count <= 1000) {
-      arr.push(...data.items)
-      this._DateLastFetching = Date.now();
-      this._list = arr;
-      return this._list
-    }
+    let firstFetching: any = await this.getDonuts();
+    const factory = Math.floor(firstFetching.count / 1000) <= 1 ? 1 : Math.floor(firstFetching.count / 1000);
 
     for (let i = 0; i < factory; i++) {
-      this.getDonuts(i).then((data: any): any => {
-        if (data.items.length < 1000) {
-          return arr.push(...data.items)
-        } 
-        arr.push(...data.items)
-      });
+      let fetching:any = await this.getDonuts(i);
+      arr.push(...fetching.items);
     }
 
     this._DateLastFetching = Date.now();
     this._list = arr;
-    return this._list
-  });
+    return this._list;
+  };
 
   getDonuts = (offset?: number) => this._vk.api.groups.getMembers({
     group_id: "204463745",

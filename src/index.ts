@@ -40,6 +40,7 @@ io.on('connection', async (socket: Socket) => {
     }
 
     console.log(options)
+    // console.log(options)
     // listUser.addUser(new User(socket, options));
   } else { 
     console.log("No user VKMA");
