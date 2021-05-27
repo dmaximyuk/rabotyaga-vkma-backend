@@ -4,11 +4,13 @@ const tForm = new TimeFormatting();
 
 class Donut {
   private _DateLastFetching: number;
+  vk: VK;
   private _Vk: VK;
   private _List: number[];
 
   constructor(vk: VK) {
     this._DateLastFetching = 1;
+    this.vk = vk;
     this._Vk = vk;
     this._List = [];
   }

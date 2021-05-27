@@ -9,18 +9,10 @@ import {
   donut 
 } from './libs'
 
-const vk = new VK({
-  token: "f8323d8a7225e9b28144a7a4b738e29ecb6cda0a322b9723807a4af13270d4466693fd33446cfc750f870"
-});
-const listDonut = new donut(vk);
-
 const httpServer = createServer();
-const io = new Server(httpServer, {
-  cors: {
-    origin: ['*'],
-    methods: ['GET', 'POST'],
-  },
-});
+const io = new Server(httpServer, { cors: { origin: ['*'], methods: ['GET', 'POST'] } });
+const vk = new VK({ token: process.env.TOKEN || "" });
+const listDonut = new donut(vk);
 
 io.on('connection', async (socket: Socket) => {
   const auth = sign(socket.handshake?.auth?.token);
