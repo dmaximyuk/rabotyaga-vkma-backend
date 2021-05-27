@@ -37,7 +37,7 @@ io.on('connection', async (socket: Socket) => {
     const options: TOptionsUser = {
       ...data,
     }
-
+    console.clear()
     console.log(options)
     // listUser.addUser(new User(socket, options));
   } else { 

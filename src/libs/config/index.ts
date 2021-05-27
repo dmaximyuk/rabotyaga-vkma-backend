@@ -1,2 +1,2 @@
-export {default as Schema} from './schema';
-export {default as User} from './user';
+export {default as SavedUser} from './schema';
+export {default as jsonUser} from './user';

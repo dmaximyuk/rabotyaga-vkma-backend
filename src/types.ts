@@ -39,3 +39,9 @@ export type TOptionsUser = {
   id: number;
   user: object;
 }
+
+export type TMongoDB = {
+  usr?: any;
+  newDate?: any;
+  type: "GET" | "SEARCH" | "GET_RATING" | "SAVE";
+}

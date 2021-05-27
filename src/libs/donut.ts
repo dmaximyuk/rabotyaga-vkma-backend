@@ -4,18 +4,18 @@ const tForm = new TimeFormatting();
 
 class Donut {
   private _DateLastFetching: number;
-  private _vk: VK;
-  private _list: number[];
+  private _Vk: VK;
+  private _List: number[];
 
   constructor(vk: VK) {
     this._DateLastFetching = 1;
-    this._vk = vk;
-    this._list = [];
+    this._Vk = vk;
+    this._List = [];
   }
 
   get = async () => {
     if (this._DateLastFetching === 1 || tForm.minutes(this._DateLastFetching)  >= 10) return await this.fetchingDonuts();
-    return this._list
+    return this._List
   };
 
   fetchingDonuts = async () => {
@@ -29,11 +29,11 @@ class Donut {
     }
 
     this._DateLastFetching = Date.now();
-    this._list = arr;
+    this._List = arr;
     return arr;
   };
 
-  getDonuts = (offset?: number) => this._vk.api.groups.getMembers({
+  getDonuts = (offset?: number) => this._Vk.api.groups.getMembers({
     group_id: "204463745",
     // filter: "donut",
     offset: offset || 0
