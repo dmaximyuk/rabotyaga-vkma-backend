@@ -8,15 +8,15 @@ class Donut {
   private _list: number[];
 
   constructor(vk: VK) {
-    this._DateLastFetching = 1;
+    this._DateLastFetching = Date.now();
     this._vk = vk;
     this._list = [];
     
-    this.get();
+    this.get("FIRST_START");
   }
 
-  get = () => {
-    if (this._DateLastFetching === 1 || tForm.minutes(this._DateLastFetching)  >= 10) return this.fetchingDonuts();
+  get = (type?: string) => {
+    if (type === "FIRST_START" || tForm.minutes(this._DateLastFetching)  >= 10) return this.fetchingDonuts();
     return this._list
   };
 
@@ -32,10 +32,10 @@ class Donut {
     }
 
     for (let i = 0; i < factory; i++) {
-      this.getDonuts(i).then((data: any) => {
+      this.getDonuts(i).then((data: any): any => {
         if (data.items.length < 1000) {
-          arr.push(...data.items)
-        }
+          return arr.push(...data.items)
+        } 
         arr.push(...data.items)
       });
     }
