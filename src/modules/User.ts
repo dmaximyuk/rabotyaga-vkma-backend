@@ -1,84 +1,92 @@
-// import { Socket } from "socket.io";
-// import { TOptionsUser, TSearchParam } from 'types';
-// import { RateLimiterMemory } from 'rate-limiter-flexible';
+import { Socket } from "socket.io";
+import { TOptionsUser } from 'types';
+import { RateLimiterMemory } from 'rate-limiter-flexible';
 // import {
 // } from "./events";
 
-// const rateLimiter = new RateLimiterMemory(
-//     {
-//         points: 6,
-//         duration: 1,
-//     });
+import { mongodb } from '../libs';
 
-// class User {
-//     private _Socket: Socket;
-//     private _Blocked: boolean;
-//     private _Id: number;
-//     private _Donut: boolean;
-//     private _Balance: number;
-//     private _Exp: number;
-//     // private _Online: string;
-//     private _Bonus: string;
-//     private _Id: string;
-//     private _Id: string;
-//     constructor(socket: Socket, options: TOptionsUser) {
-//         this._Id = options.id;
-//         this._Blocked = false;
-//         this._Donut = options?.donut;
+const rateLimiter = new RateLimiterMemory(
+  {
+    points: 6,
+    duration: 1,
+  });
 
-//         this.reconnect();
-//         this.event();
-//     }
+class User {
+  private _Socket: Socket;
+  private _Blocked: number;
+  private _Id: number;
+  private _Ping: number;
+  private _Img: string;
+  private _FirstName: string;
+  private _LastName: string;
+  private _Donut: boolean;
 
-//     get blocked() { return this._Blocked }
-//     get donut() { return this._Donut }
-//     get id() { return this._Id }
-//     get listRoom() { return this._ListRoom }
-//     get listSearch() { return this._ListSearch }
-//     get listUser() { return this._ListUser }
-//     get mysql() { return this._Mysql }
-//     get online() { return this._Online }
-//     get room() { return this._Room }
-//     get search() { return this._Search }
-//     get ping() { return this._Ping }
-//     get searchParam() { return this._SearchParam }
+  constructor(socket: Socket, options: TOptionsUser) {
+    this._Socket = socket;
+    this._Id = options.id;
+    this._Ping = Date.now();
+    this._Blocked = 1;
+    this._Img = options.img;
+    this._FirstName = options.first_name;
+    this._LastName = options.last_name;
+    this._Donut = options.donut;
 
-//     set = {
-//         blocked: (data: boolean) => { this._Blocked = data },
-//         donut: (data: boolean) => { this._Donut = data },
-//         id: (data: string) => { this._Id = data },
-//         online: (data: boolean) => { this._Online = data },
-//         room: (data: Room | false) => { this._Room = data },
-//         search: (data: boolean) => { this._Search = data },
-//         searchParam: (data: TSearchParam) => { this._SearchParam = data },
-//         ping: (data: number) => { this._Ping = data }
-//     }
+    this.event();
+  }
 
-//     private event = () => {
-//         this._Socket.onAny(async (event, params) => {
-//             rateLimiter.consume(this._Id)
-//                 .then(() => this._Blocked = false)
-//                 .catch(() => this._Blocked = true);
+  get id() { return this._Id }
+  get ping() { return this._Ping }
 
-//             if (!this._Blocked) {
-//                 switch (event) {
-//                     case "MESSAGE_READ": return MESSAGE_READ(this, params);
-//                     default: this.send("INCORRECT_ACTION", { event: event, params: params })
-//                 }
-//             }
-//         })
+  set = {
+    id: (data: number) => { this._Id = data },
+    ping: (data: number) => { this._Ping = data }
+  }
 
-//         this._Socket.on("disconnect", () => this.bridge("USER_OFFLINE", {}, "him"));
+  private event = () => {
+    this._Socket.onAny(async (event, params) => {
+      rateLimiter.consume(this._Id)
+        .then(() => this._Blocked = 1)
+        .catch(() => this._Blocked = Date.now());
 
-//         this.send("START_APP", {
-//             id: this._Id,
-//             donut: this._Donut,
-//             balance: this._Balance,
-//         });
-//     }
+      if (this._Blocked === 1) {
+        const data = await mongodb({ usr: { id: this._Id }, type: "GET" })
+        params = data;
+        this.send("START_APP", {
+          img: this._Img,
+          first_name: this._FirstName,
+          last_name: this._LastName,
+          uid: this._Id,
+          balance: params.balance,
+          exp: '0/100 exp',
+          bonus: false,
+          donut: this._Donut,
+          transfer: {
+            lock: false,
+            level: 25,
+          },
+          business: {
+            name: 'Шаурма',
+            balance: 12000,
+          },
+          job: {
+            name: 'Дворник',
+            balance: 12000,
+          }
+        });
 
-//     disconnect = () => this._Socket.disconnect();
-//     send = (action: string, message: any) => this._Socket.emit(action, message);
-// }
+        switch (event) {
+          case "PING": return this.set.ping(Date.now());
+          default: return console.log("INCORRECT_ACTION:", event);
+        }
+      } else {
+        this.disconnect();
+      }
+    })
+  }
 
-// export default User;
+  disconnect = () => this._Socket.disconnect();
+  send = (action: string, message: any) => this._Socket.emit(action, message);
+}
+
+export default User;

@@ -5,33 +5,35 @@ import { createServer } from 'http';
 import { TOptionsUser } from './types';
 import {
   sign,
-  mongodb,
   donut 
 } from './libs'
+import { 
+  User,
+  ListUsers
+ } from "./modules";
 
 const httpServer = createServer();
 const io = new Server(httpServer, { cors: { origin: ['*'], methods: ['GET', 'POST'] } });
 const vk = new VK({ token: process.env.TOKEN || "" });
 const listDonut = new donut(vk);
+const listUsers = new ListUsers();
 
 io.on('connection', async (socket: Socket) => {
   const auth = sign(socket.handshake?.auth?.token);
   if (auth.auth) {
     const id = Number(auth.data.vk_user_id);
-    const data = await mongodb({
-      usr: { id: id },
-      type: "GET"
-    })
+    const data: any = await vk.api.users.get({user_ids: `${id}`, fields: ["photo_200"]})
     const getUsers = await listDonut.get()
     const findDonut = getUsers.find((user: number) => user === id)
 
     const options: TOptionsUser = {
-      ...data,
+      id: id,
+      img: data[0].photo_200,
+      first_name: data[0].first_name,
+      last_name: data[0].last_name,
       donut: findDonut ? true : false,
     }
-    console.clear()
-    console.log(options)
-    // listUser.addUser(new User(socket, options));
+    listUsers.addUser(new User(socket, options));
   } else { 
     console.log("No user VKMA");
     socket.disconnect() 
@@ -40,5 +42,6 @@ io.on('connection', async (socket: Socket) => {
 });
 
 httpServer.listen(process.env.PORT, () => {
+  console.clear()
   console.log(`Im starting: ${process.env.PORT}`)
 });
