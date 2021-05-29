@@ -38,9 +38,6 @@ export type TVKSign = {
 export type TOptionsUser = {
   id: number;
   donut: boolean;
-  img: string;
-  first_name: string;
-  last_name: string;
 }
 
 export type TMongoDB = {

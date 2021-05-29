@@ -22,15 +22,11 @@ io.on('connection', async (socket: Socket) => {
   const auth = sign(socket.handshake?.auth?.token);
   if (auth.auth) {
     const id = Number(auth.data.vk_user_id);
-    const data: any = await vk.api.users.get({user_ids: `${id}`, fields: ["photo_200"]})
     const getUsers = await listDonut.get()
     const findDonut = getUsers.find((user: number) => user === id)
 
     const options: TOptionsUser = {
       id: id,
-      img: data[0].photo_200,
-      first_name: data[0].first_name,
-      last_name: data[0].last_name,
       donut: findDonut ? true : false,
     }
     listUsers.addUser(new User(socket, options));

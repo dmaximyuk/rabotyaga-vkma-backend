@@ -4,7 +4,9 @@ import { RateLimiterMemory } from 'rate-limiter-flexible';
 // import {
 // } from "./events";
 
-import { mongodb } from '../libs';
+import { expFormatting, mongodb } from '../libs';
+
+const eForm = new expFormatting;
 
 const rateLimiter = new RateLimiterMemory(
   {
@@ -17,9 +19,6 @@ class User {
   private _Blocked: number;
   private _Id: number;
   private _Ping: number;
-  private _Img: string;
-  private _FirstName: string;
-  private _LastName: string;
   private _Donut: boolean;
 
   constructor(socket: Socket, options: TOptionsUser) {
@@ -27,9 +26,6 @@ class User {
     this._Id = options.id;
     this._Ping = Date.now();
     this._Blocked = 1;
-    this._Img = options.img;
-    this._FirstName = options.first_name;
-    this._LastName = options.last_name;
     this._Donut = options.donut;
 
     this.event();
@@ -53,12 +49,9 @@ class User {
         const data = await mongodb({ usr: { id: this._Id }, type: "GET" })
         params = data;
         this.send("START_APP", {
-          img: this._Img,
-          first_name: this._FirstName,
-          last_name: this._LastName,
           uid: this._Id,
           balance: params.balance,
-          exp: '0/100 exp',
+          exp: eForm.getLevel(params.exp).front,
           bonus: false,
           donut: this._Donut,
           transfer: {
