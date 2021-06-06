@@ -1,4 +1,5 @@
 import { ParsedUrlQuery } from 'querystring';
+import ListUser from './modules/ListUsers';
 
 export type TOptionsRoom = {
   id: string;
@@ -38,6 +39,7 @@ export type TVKSign = {
 export type TOptionsUser = {
   id: number;
   donut: boolean;
+  listUsers: ListUser;
 }
 
 export type TMongoDB = {

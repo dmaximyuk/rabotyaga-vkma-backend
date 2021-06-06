@@ -1,3 +1,5 @@
+import Intl from 'intl';
+
 type TGenerate = {
   maxLevel?: number;
 } 
@@ -39,7 +41,7 @@ class expFormatting {
 
     return {
       back: { level: index, myExp: myExp, maxExp: this._Levels[index] },
-      front: `${index} (${myExp}/${this._Levels[index]} exp)`
+      front: `${index} (${new Intl.NumberFormat('ru-RU').format(myExp)}/${new Intl.NumberFormat('ru-RU').format(this._Levels[index])} exp)`
     }
   }
 }

@@ -4,7 +4,8 @@ import { RateLimiterMemory } from 'rate-limiter-flexible';
 // import {
 // } from "./events";
 
-import { expFormatting, mongodb } from '../libs';
+import { expFormatting, mongodb, reduceNumber } from '../libs';
+import ListUser from "./ListUsers";
 
 const eForm = new expFormatting;
 
@@ -16,6 +17,7 @@ const rateLimiter = new RateLimiterMemory(
 
 class User {
   private _Socket: Socket;
+  private _ListUser: ListUser;
   private _Blocked: number;
   private _Id: number;
   private _Ping: number;
@@ -27,6 +29,7 @@ class User {
     this._Ping = Date.now();
     this._Blocked = 1;
     this._Donut = options.donut;
+    this._ListUser = options.listUsers;
 
     this.event();
   }
@@ -49,8 +52,8 @@ class User {
         const data = await mongodb({ usr: { id: this._Id }, type: "GET" })
         params = data;
         this.send("START_APP", {
-          uid: this._Id,
-          balance: params.balance,
+          online: reduceNumber(this._ListUser.length),
+          balance: reduceNumber(params.balance),
           exp: eForm.getLevel(params.exp).front,
           bonus: false,
           donut: this._Donut,
@@ -60,11 +63,11 @@ class User {
           },
           business: {
             name: 'Шаурма',
-            balance: 12000,
+            balance: reduceNumber(12000),
           },
           job: {
             name: 'Дворник',
-            balance: 12000,
+            balance: reduceNumber(12000),
           }
         });
 

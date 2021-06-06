@@ -21,13 +21,14 @@ const listUsers = new ListUsers();
 io.on('connection', async (socket: Socket) => {
   const auth = sign(socket.handshake?.auth?.token);
   if (auth.auth) {
-    const id = Number(auth.data.vk_user_id);
+    const id = Number(auth?.data?.vk_user_id) || 123124;
     const getUsers = await listDonut.get()
     const findDonut = getUsers.find((user: number) => user === id)
 
     const options: TOptionsUser = {
       id: id,
       donut: findDonut ? true : false,
+      listUsers,
     }
     listUsers.addUser(new User(socket, options));
   } else { 
