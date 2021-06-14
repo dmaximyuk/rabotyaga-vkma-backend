@@ -32,7 +32,7 @@ class Markup {
         earnings: Math.floor((cost / 100) * config.business.earnings),
         maxEarnings: Math.floor(Math.floor((cost / 100) * config.business.earnings) * config.business.factory),
         tax: Math.floor((cost / 100) * config.business.tax),
-        exp: Math.floor(this.randomNum(10, 100))
+        exp: this.randomNum(10, 100)
       }
     })
     return newArr;
@@ -42,13 +42,13 @@ class Markup {
     await this.updateCourse()
     const jobs = shop.job;
     const newArr = jobs.map((item) => {
-      let earnings = item.earnings * this._Usd
+      let earnings = Math.floor(item.earnings * this._Usd)
       return {
         id: item.id,
         level: item.level,
-        earnings: Math.floor(earnings),
-        maxEarnings: Math.floor(Math.floor(earnings) * config.job.factory),
-        exp: Math.floor(this.randomNum(10, 100))
+        earnings: earnings,
+        maxEarnings: Math.floor(earnings * config.job.factory),
+        exp: this.randomNum(10, 100)
       }
     })
     return newArr;
