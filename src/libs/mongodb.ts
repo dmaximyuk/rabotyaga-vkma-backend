@@ -27,7 +27,7 @@ export default async ({ usr, newDate, type }: TMongoDB) => {
     case "GET_RATING": return data.map((user: any) => { return { id: user.id, balance: user.balance } });
     case "GET":
       if (getUser) return getUser._doc;
-      const user = jsonUser(usr.id);
+      const user = jsonUser(usr.id, usr.checkin);
       const dataUser = await new SavedUser(user).save();
       return dataUser._doc;
     default: return console.log("MongoDB: not type");

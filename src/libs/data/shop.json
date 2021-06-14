@@ -1,0 +1,79 @@
+{
+  "business": [
+    {
+      "id": 1,
+      "type": "business",
+      "cost": 10498.4
+    },
+    {
+      "id": 2,
+      "type": "business",
+      "cost": 22542.9
+    },
+    {
+      "id": 3,
+      "type": "business",
+      "cost": 129452.1
+    },
+    {
+      "id": 4,
+      "type": "business",
+      "cost": 1465798.6
+    },
+    {
+      "id": 5,
+      "type": "business",
+      "cost": 18465798.9
+    }
+  ],
+  "job": [
+    {
+      "id": 1,
+      "type": "job",
+      "level": 1,
+      "earnings": 100
+    },
+    {
+      "id": 2,
+      "type": "job",
+      "level": 3,
+      "earnings": 250
+    },
+    {
+      "id": 3,
+      "type": "job",
+      "level": 9,
+      "earnings": 500
+    },
+    {
+      "id": 4,
+      "type": "job",
+      "level": 12,
+      "earnings": 900.7
+    },
+    {
+      "id": 5,
+      "type": "job",
+      "level": 19,
+      "earnings": 1500.4
+    },
+    {
+      "id": 6,
+      "type": "job",
+      "level": 36,
+      "earnings": 3459.8
+    },
+    {
+      "id": 7,
+      "type": "job",
+      "level": 64,
+      "earnings": 8460.7
+    },
+    {
+      "id": 8,
+      "type": "job",
+      "level": 92,
+      "earnings": 19024.1
+    }
+  ]
+}

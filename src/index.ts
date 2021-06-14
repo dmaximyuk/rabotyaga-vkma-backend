@@ -27,6 +27,7 @@ io.on('connection', async (socket: Socket) => {
 
     const options: TOptionsUser = {
       id: id,
+      date: socket.handshake?.auth?.date,
       donut: findDonut ? true : false,
       listUsers,
     }

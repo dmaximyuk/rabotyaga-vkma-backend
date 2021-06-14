@@ -38,6 +38,7 @@ export type TVKSign = {
 
 export type TOptionsUser = {
   id: number;
+  date: string;
   donut: boolean;
   listUsers: ListUser;
 }
@@ -45,5 +46,6 @@ export type TOptionsUser = {
 export type TMongoDB = {
   usr?: any;
   newDate?: any;
+  checkin?: any,
   type: "GET" | "SEARCH" | "GET_RATING" | "SAVE";
 }

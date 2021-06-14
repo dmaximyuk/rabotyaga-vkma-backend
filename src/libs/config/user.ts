@@ -1,6 +1,7 @@
-export default (id: number) => {
+export default (id: number, date: string) => {
   return {
     id: id,
+    checkin: date, 
     exp: 0,
     balance: 1000,
     bonus: 0,
