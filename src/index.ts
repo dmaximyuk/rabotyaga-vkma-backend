@@ -5,7 +5,8 @@ import { createServer } from 'http';
 import { TOptionsUser } from './types';
 import {
   sign,
-  donut 
+  donut,
+  Markups 
 } from './libs'
 import { 
   User,
@@ -21,6 +22,7 @@ const listUsers = new ListUsers();
 io.on('connection', async (socket: Socket) => {
   const auth = sign(socket.handshake?.auth?.token);
   if (auth.auth) {
+    const newMarkups = (props: any) => new Markups(props)
     const id = Number(auth?.data?.vk_user_id) || 123124;
     const getUsers = await listDonut.get()
     const findDonut = getUsers.find((user: number) => user === id)
@@ -31,7 +33,8 @@ io.on('connection', async (socket: Socket) => {
       donut: findDonut ? true : false,
       listUsers,
     }
-    listUsers.addUser(new User(socket, options));
+
+    listUsers.addUser(new User(socket, options, newMarkups));
   } else { 
     console.log("No user VKMA");
     socket.disconnect() 

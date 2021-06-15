@@ -7,7 +7,7 @@
     "maxMoney": 1000000000000000
   },
   "business": {
-    "sell": 0.4,
+    "sell": 40,
     "factory": 4,
     "earnings": 2.7,
     "tax": 0.24

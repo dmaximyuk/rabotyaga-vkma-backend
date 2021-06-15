@@ -1,6 +1,7 @@
 import { Socket } from "socket.io";
 import { TOptionsUser } from 'types';
 import { RateLimiterMemory } from 'rate-limiter-flexible';
+import ListUser from "./ListUsers";
 import 'moment/locale/ru'
 import moment from 'moment'
 moment.locale('ru');
@@ -9,13 +10,12 @@ import {
   expFormatting, 
   mongodb, 
   reduceNumber,
+  timeFormatting,
+  Markups
 } from '../libs';
 
-import ListUser from "./ListUsers";
-import Markup from "../libs/markup";
-
 const eForm = new expFormatting;
-const Markups = new Markup;
+const tFormatting = new timeFormatting;
 
 const rateLimiter = new RateLimiterMemory(
   {
@@ -24,6 +24,7 @@ const rateLimiter = new RateLimiterMemory(
   });
 
 class User {
+  private _Markups: Markups;
   private _Socket: Socket;
   private _ListUser: ListUser;
   private _Blocked: number;
@@ -32,7 +33,8 @@ class User {
   private _Ping: number;
   private _Donut: boolean;
 
-  constructor(socket: Socket, options: TOptionsUser) {
+  constructor(socket: Socket, options: TOptionsUser, newMarkups: any) {
+    this._Markups = newMarkups({tFormatting: tFormatting});
     this._Socket = socket;
     this._Id = options.id;
     this._Checkin = options.date;
@@ -62,6 +64,10 @@ class User {
       if (this._Blocked === 1) {
         switch (event) {
           case "PING": return this.set.ping();
+          case "GET_ITEMS":
+            this.send("GET_BUSINESSES", await this._Markups.getBusinesses());
+            return;
+          case "GET_JOBS": return this.send("GET_JOBS", await this._Markups.getJobs());
           default: return console.log("INCORRECT_ACTION:", event);
         }
       } else {
@@ -71,9 +77,7 @@ class User {
   }
   
   startApp = async () => {
-    console.log("Send start params")
-    console.log(await Markups.getJobs())
-    
+    console.log("Send start params")    
     const data = await mongodb({ usr: { id: this._Id, checkin: this._Checkin }, type: "GET" })
     this.send("START_APP", {
       checkin: data.checkin,
