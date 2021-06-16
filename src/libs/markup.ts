@@ -22,13 +22,11 @@ class Markup {
 
   private updateCourse = async () => {
     const getLastFetchingMinutes = this._TimeFormatting.minutes(this._LastFetching)
-    console.log(Date.now())
     if (getLastFetchingMinutes >= 10 || this._LastFetching === 1) {
       let fetchingCourses = await fetch('https://www.cbr-xml-daily.ru/daily_json.js')
       if (fetchingCourses) this._LastFetching = Date.now();
       let courses: any = await fetchingCourses.json();
       this._Usd = courses.Valute['USD'].Value;
-      console.log(this._Usd);
     }
   }
 
