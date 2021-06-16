@@ -1,19 +1,33 @@
 {
   "restrictions": {
-    "business": 6,
-    "job": 3,
-    "transfer": 10000,
-    "transferLevel": 5,
+    "transfer": {
+      "limit": 10000,
+      "access": 5
+    },
     "maxMoney": 1000000000000000
   },
   "business": {
     "sell": 40,
-    "factory": 4,
+    "factory": 12,
     "earnings": 2.7,
     "tax": 0.24
   },
   "job": {
-    "factory": 2,
+    "factory": 6,
     "donutEarningsExp": 1.2
+  },
+  "market": {
+    "tax": 5,
+    "items": 50,
+    "place": 30000,
+    "access": 3
+  },
+  "promotions": {
+    "sell": 70,
+    "factory": 4,
+    "earnings": 2.7
+  },
+  "items": {
+    "sell": 50
   }
 }
