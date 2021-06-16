@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import Intl from 'intl';
 import shop from './data/shop.json';
 import config from './data/config.json'
 import {
@@ -43,15 +44,16 @@ class Markup {
       let cost = item.cost * this._Usd; 
       return {
         id: item.id,
-        img: 'https://img.delo-vcusa.ru/2019/11/arabskaja-shaurma.jpg',
+        img: item.img,
         type: item.type,
         title: item.name,
         cost: Math.floor(cost),
         earnings: Math.floor((cost / 100) * config.business.earnings),
-        earningsString: Math.floor((cost / 100) * config.business.earnings),
+        earningsString: new Intl.NumberFormat('ru').format(Math.floor((cost / 100) * config.business.earnings)),
         maxEarnings: Math.floor(Math.floor((cost / 100) * config.business.earnings) * config.business.factory),
+        maxEarningsString: new Intl.NumberFormat('ru').format(Math.floor(Math.floor((cost / 100) * config.business.earnings) * config.business.factory)),
         tax: Math.floor((cost / 100) * config.business.tax),
-        exp: this.randomNum(10, 100)
+        exp: this.randomNum(50, 100)
       }
     })
     return newArr;
@@ -69,8 +71,9 @@ class Markup {
         title: item.name,
         level: item.level,
         earnings: earnings,
-        earningsString: earnings,
+        earningsString: new Intl.NumberFormat('ru').format(earnings),
         maxEarnings: Math.floor(earnings * config.job.factory),
+        maxEarningsString: new Intl.NumberFormat('ru').format(Math.floor(earnings * config.job.factory)),
         exp: this.randomNum(10, 100)
       }
     })

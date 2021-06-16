@@ -2,31 +2,36 @@
   "business": [
     {
       "id": 1,
-      "name": "Ресторан",
+      "img": "https://cameralabs.org/media/cameralabs/images/Tanya/May/15.05/s_s33_0RTXYDB4.jpg",
+      "name": "Ресейл",
       "type": "business",
       "cost": 10498.4
     },
     {
       "id": 2,
-      "name": "Ресейл",
+      "img": "https://cameralabs.org/media/camera/june/19june/23_87e3defd4227a1ca54cba1eafad07b75.jpg",
+      "name": "Ресторан",
       "type": "business",
       "cost": 22542.9
     },
     {
       "id": 3,
-      "name": "Ресейл",
+      "img": "https://n1s1.elle.ru/3b/9c/57/3b9c572e5304e1f3b6039826e0c101d5/620x413_1_25efaba72e3a4398a46b13d0824fe639@1125x750_0xac120002_17788636991545389604.jpeg",
+      "name": "Ночной клуб",
       "type": "business",
       "cost": 129452.1
     },
     {
       "id": 4,
-      "name": "Ресейл",
+      "img": "https://img.air-gun.ru/images/magazin.webp",
+      "name": "Оружейный магазин",
       "type": "business",
       "cost": 1465798.6
     },
     {
       "id": 5,
-      "name": "Ресейл",
+      "img": "https://cdnuploads.aa.com.tr/uploads/Contents/2019/12/02/thumbs_b_c_9c15c7437a95a35cc2c944639c822156.jpg?v=123432",
+      "name": "Нефтяная компания",
       "type": "business",
       "cost": 18465798.9
     }
