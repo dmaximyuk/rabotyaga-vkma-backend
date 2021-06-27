@@ -34,7 +34,6 @@ class User {
   private _Donut: boolean;
 
   constructor(socket: Socket, options: TOptionsUser, newMarkups: any) {
-    this._Markups = newMarkups({tFormatting: tFormatting});
     this._Socket = socket;
     this._Id = options.id;
     this._Checkin = options.date;
@@ -42,6 +41,7 @@ class User {
     this._Blocked = 1;
     this._Donut = options.donut;
     this._ListUser = options.listUsers;
+    this._Markups = newMarkups({tFormatting: tFormatting, id: this._Id, checkin: this._Checkin});
 
     this.event();
     this.startApp();
@@ -64,9 +64,9 @@ class User {
       if (this._Blocked === 1) {
         switch (event) {
           case "PING": return this.set.ping();
-          case "GET_ITEMS":
-            this.send("GET_BUSINESSES", await this._Markups.getBusinesses());
-            return;
+          case "GET_ITEMS": 
+          return this.send("SHOP", await this._Markups.getBusinesses());
+          // return console.log(await this._Markups.getJobs())
           case "GET_JOBS": return this.send("GET_JOBS", await this._Markups.getJobs());
           default: return console.log("INCORRECT_ACTION:", event);
         }

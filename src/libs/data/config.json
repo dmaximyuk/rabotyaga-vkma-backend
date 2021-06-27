@@ -9,8 +9,8 @@
   "business": {
     "sell": 40,
     "factory": 12,
-    "earnings": 2.7,
-    "tax": 0.24
+    "earnings": 6.4,
+    "tax": 10.8
   },
   "job": {
     "factory": 6,
