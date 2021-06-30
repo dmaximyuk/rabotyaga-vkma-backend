@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 const SaveUser = new mongoose.Schema({
   id: Number,
+  subscribe: Boolean, 
   checkin: String,
   exp: Number,
   balance: Number,

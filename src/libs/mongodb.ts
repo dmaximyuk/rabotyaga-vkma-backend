@@ -16,7 +16,7 @@ export default async ({ usr, newDate, type }: TMongoDB) => {
 
   switch (type) {
     case "SAVE":
-      if (saveUser) return 'ERR_CODE_1';
+      if (!saveUser) return 'ERR_CODE_1';
       const limit: number = Config.restrictions.maxMoney;
       const balance:any = newDate.balance;
       if ( balance >= limit) newDate.balance = limit;

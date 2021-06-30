@@ -53,9 +53,9 @@ class Markup {
     const businesses = shop.business;
     const newArr = businesses.map((item) => {
       let cost = Math.floor(item.cost * this._Usd);
-      let earnings = Math.floor(((cost / 100) * config.business.earnings) / 24)
-      let maxEarnings = Math.floor(earnings) * config.business.factory
-      let tax = Math.floor((earnings / 100) * config.business.tax)
+      let earnings = Math.floor(((cost / 100) * config.business.payback.earnings) / 24)
+      let maxEarnings = Math.floor(earnings) * config.business.payback.factory
+      let tax = Math.floor((earnings / 100) * config.business.payback.tax)
       let disable = !(this._User.balance >= cost)
 
       return {

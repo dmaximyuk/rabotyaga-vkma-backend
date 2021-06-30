@@ -13,6 +13,7 @@ import {
   timeFormatting,
   Markups
 } from '../libs';
+import { getSubscribeBonus } from "./events";
 
 const eForm = new expFormatting;
 const tFormatting = new timeFormatting;
@@ -48,6 +49,7 @@ class User {
   }
 
   get id() { return this._Id }
+  get checkin() { return this._Checkin }
   get ping() { return this._Ping }
 
   set = {
@@ -56,7 +58,7 @@ class User {
   }
 
   private event = () => {
-    this._Socket.onAny(async (event) => {
+    this._Socket.onAny(async (event, options) => {
       rateLimiter.consume(this._Id)
         .then(() => this._Blocked = 1)
         .catch(() => this._Blocked = Date.now());
@@ -64,9 +66,8 @@ class User {
       if (this._Blocked === 1) {
         switch (event) {
           case "PING": return this.set.ping();
-          case "GET_ITEMS": 
-          return this.send("SHOP", await this._Markups.getBusinesses());
-          // return console.log(await this._Markups.getJobs())
+          case "GET_ITEMS": return this.send("SHOP", await this._Markups.getBusinesses());
+          case "SUBSCRIBE_GROUP": return await getSubscribeBonus({user: this, params: options});
           case "GET_JOBS": return this.send("GET_JOBS", await this._Markups.getJobs());
           default: return console.log("INCORRECT_ACTION:", event);
         }
@@ -77,9 +78,9 @@ class User {
   }
   
   startApp = async () => {
-    console.log("Send start params")    
     const data = await mongodb({ usr: { id: this._Id, checkin: this._Checkin }, type: "GET" })
     this.send("START_APP", {
+      subscribe: data.subscribe,
       checkin: data.checkin,
       online: reduceNumber(this._ListUser.length),
       balance: reduceNumber(data.balance),

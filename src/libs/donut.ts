@@ -16,7 +16,7 @@ class Donut {
   }
 
   get = async () => {
-    if (this._DateLastFetching === 1 || tForm.minutes(this._DateLastFetching)  >= 10) return await this.fetchingDonuts();
+    if (this._DateLastFetching === 1 || tForm.minutes(this._DateLastFetching)  >= 3) return await this.fetchingDonuts();
     return this._List
   };
 
@@ -37,7 +37,7 @@ class Donut {
 
   getDonuts = (offset?: number) => this._Vk.api.groups.getMembers({
     group_id: "204463745",
-    // filter: "donut",
+    filter: "donut",
     offset: offset || 0
   })
 }

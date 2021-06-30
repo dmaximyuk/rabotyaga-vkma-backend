@@ -7,10 +7,19 @@
     "maxMoney": 1000000000000000
   },
   "business": {
-    "sell": 40,
-    "factory": 12,
-    "earnings": 6.4,
-    "tax": 10.8
+    "main": {
+      "price": 7000,
+      "sell": 40
+    },
+    "payback": {
+      "factory": 12,
+      "earnings": 20,
+      "tax": 15
+    },
+    "donut": {
+      "exp": 2,
+      "money": 1.2
+    }
   },
   "job": {
     "factory": 6,
