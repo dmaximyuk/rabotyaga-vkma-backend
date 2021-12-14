@@ -1,12 +1,11 @@
 require('dotenv').config();
-import { VK } from 'vk-io';
 import { Server, Socket } from 'socket.io';
 import { createServer } from 'http';
 import { TOptionsUser } from './types';
 import {
   sign,
-  donut,
-  Markups 
+  Markups, 
+  mongodb
 } from './libs'
 import { 
   User,
@@ -15,8 +14,6 @@ import {
 
 const httpServer = createServer();
 const io = new Server(httpServer, { cors: { origin: ['*'], methods: ['GET', 'POST'] } });
-const vk = new VK({ token: process.env.TOKEN || "" });
-const listDonut = new donut(vk);
 const listUsers = new ListUsers();
 
 io.on('connection', async (socket: Socket) => {
@@ -24,13 +21,14 @@ io.on('connection', async (socket: Socket) => {
   if (auth.auth) {
     const newMarkups = (props: any) => new Markups(props)
     const id = Number(auth?.data?.vk_user_id) || 123124;
-    const getUsers = await listDonut.get()
-    const findDonut = getUsers.find((user: number) => user === id)
+    const data = await mongodb({ usr: { id: id, checkin: socket.handshake?.auth?.date }, type: "GET" })
 
     const options: TOptionsUser = {
       id: id,
-      date: socket.handshake?.auth?.date,
-      donut: findDonut ? true : false,
+      exp: data.exp,
+      date: data.checkin,
+      bonus: data.bonus,
+      balance: data.balance,
       listUsers,
     }
 

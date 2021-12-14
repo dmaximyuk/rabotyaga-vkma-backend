@@ -4,7 +4,10 @@
       "limit": 10000,
       "access": 5
     },
-    "maxMoney": 1000000000000000
+    "maxMoney": 1000000000000000,
+    "bonusMoney": 5000,
+    "bonusExp": 3,
+    "bonusFactory": 3
   },
   "business": {
     "main": {

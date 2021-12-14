@@ -2,18 +2,19 @@ import { Socket } from "socket.io";
 import { TOptionsUser } from 'types';
 import { RateLimiterMemory } from 'rate-limiter-flexible';
 import ListUser from "./ListUsers";
+import config from '../libs/data/config.json';
 import 'moment/locale/ru'
 import moment from 'moment'
 moment.locale('ru');
 
 import { 
   expFormatting, 
-  mongodb, 
   reduceNumber,
   timeFormatting,
   Markups
 } from '../libs';
 import { getSubscribeBonus } from "./events";
+import { giveUser } from "./helpers";
 
 const eForm = new expFormatting;
 const tFormatting = new timeFormatting;
@@ -32,7 +33,9 @@ class User {
   private _Id: number;
   private _Checkin: string;
   private _Ping: number;
-  private _Donut: boolean;
+  private _Exp: number;
+  private _Bonus: number;
+  private _Balance: number;
 
   constructor(socket: Socket, options: TOptionsUser, newMarkups: any) {
     this._Socket = socket;
@@ -40,9 +43,11 @@ class User {
     this._Checkin = options.date;
     this._Ping = Date.now();
     this._Blocked = 1;
-    this._Donut = options.donut;
     this._ListUser = options.listUsers;
     this._Markups = newMarkups({tFormatting: tFormatting, id: this._Id, checkin: this._Checkin});
+    this._Exp = options.exp;
+    this._Bonus = options.bonus;
+    this._Balance = options.balance;
 
     this.event();
     this.startApp();
@@ -51,6 +56,7 @@ class User {
   get id() { return this._Id }
   get checkin() { return this._Checkin }
   get ping() { return this._Ping }
+  get getLevel() { return eForm.getLevel(this._Exp).back.level }
 
   set = {
     id: (data: number) => { this._Id = data },
@@ -63,30 +69,35 @@ class User {
         .then(() => this._Blocked = 1)
         .catch(() => this._Blocked = Date.now());
 
-      if (this._Blocked === 1) {
-        switch (event) {
-          case "PING": return this.set.ping();
-          case "GET_ITEMS": return this.send("SHOP", await this._Markups.getBusinesses());
-          case "SUBSCRIBE_GROUP": return await getSubscribeBonus({user: this, params: options});
-          case "GET_JOBS": return this.send("GET_JOBS", await this._Markups.getJobs());
-          default: return console.log("INCORRECT_ACTION:", event);
-        }
-      } else {
-        this.disconnect();
+    const bonus = {
+      money: (config.restrictions.bonusMoney * config.restrictions.bonusFactory) * this.getLevel,
+      exp: (config.restrictions.bonusExp * config.restrictions.bonusFactory) * this.getLevel,
+    }
+
+    if (this._Blocked === 1) {
+      switch (event) {
+        case "ADS_BONUS": giveUser({user: this, money: bonus.money, exp: bonus.exp, type: "bonus"}); return this.send("ADS_TIMEOUT", 20 * 60);
+        case "PING": return this.set.ping();
+        case "GET_ITEMS": return this.send("SHOP", await this._Markups.getBusinesses());
+        case "SUBSCRIBE_GROUP": return await getSubscribeBonus({user: this, params: options});
+        case "GET_JOBS": return this.send("GET_JOBS", await this._Markups.getJobs());
+        default: return console.log("INCORRECT_ACTION:", event);
       }
+    } else {
+      this.disconnect();
+    }
     })
   }
   
   startApp = async () => {
-    const data = await mongodb({ usr: { id: this._Id, checkin: this._Checkin }, type: "GET" })
     this.send("START_APP", {
-      subscribe: data.subscribe,
-      checkin: data.checkin,
+      subscribe: false,
+      checkin: this.checkin,
       online: reduceNumber(this._ListUser.length),
-      balance: reduceNumber(data.balance),
-      exp: eForm.getLevel(data.exp).front,
-      bonus: false,
-      donut: this._Donut,
+      balance: reduceNumber(this._Balance),
+      exp: eForm.getLevel(this._Exp).front,
+      bonus: this._Bonus,
+      donut: false,
       blocked: this._Blocked !== 1,
       rating: 1,
       transfer: {

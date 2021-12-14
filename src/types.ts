@@ -38,8 +38,10 @@ export type TVKSign = {
 
 export type TOptionsUser = {
   id: number;
+  exp: number;
   date: string;
-  donut: boolean;
+  bonus: number;
+  balance: number;
   listUsers: ListUser;
 }
 

@@ -29,7 +29,7 @@ export default async ({ usr, newDate, type }: TMongoDB) => {
       if (getUser) return getUser._doc;
       const user = jsonUser(usr.id, usr.checkin);
       const dataUser = await new SavedUser(user).save();
-      return dataUser._doc;
+      return dataUser;
     default: return console.log("MongoDB: not type");
   }
 };
