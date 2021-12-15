@@ -22,7 +22,10 @@ export default async ({ usr, newDate, type }: TMongoDB) => {
       if ( balance >= limit) newDate.balance = limit;
       if ( balance < 1) newDate.balance = 0;
       newDate.__v = Number(newDate.__v) + 1;
-      await SavedUser.updateOne(saveUser, newDate);
+      console.log('saveUser', saveUser);
+      console.log('newDate', newDate);
+      const save = await SavedUser.updateOne(saveUser, newDate);
+      console.log('status save:', save);
       return 'SUCESSFUL';
     case "GET_RATING": return data.map((user: any) => { return { id: user.id, balance: user.balance } });
     case "GET":

@@ -6,11 +6,12 @@ type TProps = {
   user: User;
   exp?: number;
   money?: number;
+  bonus?: boolean;
   type: "bonus" | "msg" | "success";
 };
 
 const giveUser = async (props: TProps) => {
-  const { user, exp = undefined, money = undefined, type } = props;
+  const { user, exp = undefined, money = undefined, bonus = false, type } = props;
   const { id, checkin } = user;
   const data: any = await mongodb({
     usr: { id: id, checkin: checkin },
@@ -19,6 +20,7 @@ const giveUser = async (props: TProps) => {
 
   data.balance += money || 0;
   data.exp += exp || 0;
+  if ( bonus ) data.bonus = Date.now() + 1000 * 60 * 20;
 
   let save = await mongodb({
     usr: { id: id, checkin: checkin },
@@ -43,11 +45,12 @@ const giveUser = async (props: TProps) => {
       const msgAnd = money ? "и " : " ";
       const msgExp = exp ? `${msgAnd}+${reduceNumber(exp)} exp` : "";
       const message = `Вы получили ${msgMoney}${msgExp}`;
+      if ( bonus ) user.send("ADS_TIMEOUT", 20)
       return sendMessage(user, message, type);
     }
   }
 
-  return sendFallback(user, "Произошла ошибка на сервере, уже исправляем!");
+  return sendFallback(user);
 };
 
 export default giveUser;
