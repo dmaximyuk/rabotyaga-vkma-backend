@@ -1,5 +1,6 @@
 {
   "restrictions": {
+    "adRollback": 5,
     "transfer": {
       "limit": 10000,
       "access": 5

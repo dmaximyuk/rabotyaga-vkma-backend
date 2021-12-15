@@ -1,6 +1,8 @@
 import { User } from "../index";
 import { mongodb } from "../../libs";
 import { sendFallback } from "../helpers";
+import config from "../../libs/data/config.json";
+import { getTimeoutAdsBonus } from ".";
 
 type TProps = {
   user: User;
@@ -14,7 +16,8 @@ const AdsBonus = async ({ user }: TProps) => {
     type: "GET",
   });
 
-  data.bonus = Date.now() + 20 * 60 * 1000;
+  data.bonus =
+    Date.now() + 59 * 1000 + config.restrictions.adRollback * 60 * 1000;
 
   let save = await mongodb({
     usr: { id: id, checkin: checkin },
@@ -22,7 +25,7 @@ const AdsBonus = async ({ user }: TProps) => {
     type: "SAVE",
   });
 
-  if (save === "SUCESSFUL") return user.send("ADS_TIMEOUT", 20);
+  if (save === "SUCESSFUL") return await getTimeoutAdsBonus({ user: user });
 
   return sendFallback(user);
 };

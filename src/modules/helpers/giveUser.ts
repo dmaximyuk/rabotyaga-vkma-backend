@@ -8,10 +8,11 @@ type TProps = {
   money?: number;
   bonus?: boolean;
   type: "bonus" | "msg" | "success";
+  per?: string;
 };
 
 const giveUser = async (props: TProps) => {
-  const { user, exp = undefined, money = undefined, bonus = false, type } = props;
+  const { user, exp = undefined, money = undefined, bonus = false, type, per = ''} = props;
   const { id, checkin } = user;
   const data: any = await mongodb({
     usr: { id: id, checkin: checkin },
@@ -44,7 +45,7 @@ const giveUser = async (props: TProps) => {
       const msgMoney = money ? `+${reduceNumber(money)} ₽ ` : "";
       const msgAnd = money ? "и " : " ";
       const msgExp = exp ? `${msgAnd}+${reduceNumber(exp)} exp` : "";
-      const message = `Вы получили ${msgMoney}${msgExp}`;
+      const message = `Вы получили ${msgMoney}${msgExp}` + per;
       if ( bonus ) user.send("ADS_TIMEOUT", 20)
       return sendMessage(user, message, type);
     }

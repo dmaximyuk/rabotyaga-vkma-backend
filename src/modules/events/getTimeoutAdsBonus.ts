@@ -3,20 +3,23 @@ import { mongodb } from "../../libs";
 
 type TProps = {
   user: User;
+  date?: number;
 };
 
-const getTimeoutAdsBonus = async ({ user }: TProps) => {
+const getTimeoutAdsBonus = async ({ user, date }: TProps) => {
   const { id, checkin } = user;
+  const type = "ADS_TIMEOUT";
 
-  const data: any = await mongodb({
-    usr: { id: id, checkin: checkin },
-    type: "GET",
-  });
+  if (!date) {
+    const data: any = await mongodb({
+      usr: { id: id, checkin: checkin },
+      type: "GET",
+    });
 
-  return user.send(
-    "ADS_TIMEOUT",
-    Math.floor((data.bonus - Date.now()) / 1000 / 60)
-  );
+    return user.send(type, Math.floor((data.bonus - Date.now()) / 1000 / 60));
+  }
+
+  return user.send(type, Math.floor((date - Date.now()) / 1000 / 60));
 };
 
 export default getTimeoutAdsBonus;
