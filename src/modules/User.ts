@@ -79,6 +79,7 @@ class User {
         switch (event) {
           case "ADS_BONUS": await giveUser({user: this, money: bonus.money, exp: bonus.exp, type: "bonus", per: " за просмотр рекламы"}); return await adsBonus({user: this});
           case "PING": this.set.ping(); return await getTimeoutAdsBonus({user: this});
+          case "ADS_TIMEOUT": return await getTimeoutAdsBonus({user: this});
           case "GET_ITEMS": return this.send("SHOP", await this._Markups.getBusinesses());
           case "SUBSCRIBE_GROUP": return await getSubscribeBonus({user: this, params: options});
           case "GET_JOBS": return this.send("GET_JOBS", await this._Markups.getJobs());
@@ -97,7 +98,7 @@ class User {
       balance: reduceNumber(this._Balance),
       exp: eForm.getLevel(this._Exp).front,
       blocked: this._Blocked !== 1,
-      adRollback: config.restrictions.adRollback,
+      adRollback: config.restrictions.adRollback * 60,
       rating: 1,
       transfer: {
         lock: false,

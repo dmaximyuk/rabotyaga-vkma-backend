@@ -16,10 +16,10 @@ const getTimeoutAdsBonus = async ({ user, date }: TProps) => {
       type: "GET",
     });
 
-    return user.send(type, Math.floor((data.bonus - Date.now()) / 1000 / 60));
+    return user.send(type, Math.floor((data.bonus - Date.now()) / 1000));
   }
 
-  return user.send(type, Math.floor((date - Date.now()) / 1000 / 60));
+  return user.send(type, Math.floor((date - Date.now()) / 1000));
 };
 
 export default getTimeoutAdsBonus;

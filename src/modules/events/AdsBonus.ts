@@ -17,7 +17,7 @@ const AdsBonus = async ({ user }: TProps) => {
   });
 
   data.bonus =
-    Date.now() + 59 * 1000 + config.restrictions.adRollback * 60 * 1000;
+    Date.now() + config.restrictions.adRollback * 60 * 1000;
 
   let save = await mongodb({
     usr: { id: id, checkin: checkin },
