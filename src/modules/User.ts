@@ -90,7 +90,7 @@ class User {
   }
   
   startApp = async () => {
-    this.send("START_APP", {
+    const dataStartApp = {
       checkin: this.checkin,
       online: reduceNumber(this._ListUser.length),
       balance: reduceNumber(this._Balance),
@@ -109,9 +109,10 @@ class User {
         name: 'Дворник',
         balance: reduceNumber(12000),
       }
-    });
+    }
 
-    return await getTimeoutAdsBonus({user: this}); 
+    this.send("START_APP", dataStartApp);
+    // return await getTimeoutAdsBonus({ user: this }); 
   }
 
   disconnect = () => this._Socket.disconnect();

@@ -19,9 +19,11 @@ io.on("connection", async (socket: Socket) => {
     const id = Number(auth?.data?.vk_user_id) || 123124;
     const checkin = socket.handshake?.auth?.date;
     const data: any = await database("START_APP", { id: id, checkin: checkin });
-
-    if ((Date.now() - data.ban) / 1000 / 60 >= 1) {
-      socket.disconnect();
+    const isBaned = Math.floor((data.ban - Date.now()) / 1000 / 60);
+    
+    if (isBaned >= 1) {
+      socket.emit("BANED", isBaned);
+      return socket.disconnect();
     }
 
     const options: TOptionsUser = {
@@ -33,12 +35,12 @@ io.on("connection", async (socket: Socket) => {
       listUsers,
     };
 
-    listUsers.addUser(new User(socket, options, newMarkups));
+    return listUsers.addUser(new User(socket, options, newMarkups));
   } else {
     console.log("No user VKMA");
     socket.disconnect();
   }
-  socket.on("PONG", () => socket.emit("PING", {}));
+  return socket.on("PONG", () => socket.emit("PING", {}));
 });
 
 httpServer.listen(process.env.PORT, () => {
