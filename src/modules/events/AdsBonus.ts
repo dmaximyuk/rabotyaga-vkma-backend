@@ -12,7 +12,7 @@ const AdsBonus = async ({ user }: TProps) => {
   const { id } = user;
   const data: any = await database("GET_USER", { id: id });
 
-  if (Date.now() - data.bonus > 1){
+  if (data.bonus - Date.now() > 1){
     await database("SET_USER", { id: id, params: data })
     return sendFallback(user, "Вы уже получали бонус за просмотр рекламы, ваш аккаунт заморожен за подозрительные действия на 1 час.", { isBan: true, count: 1 });
   }
