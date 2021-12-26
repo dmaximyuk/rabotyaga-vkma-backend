@@ -22,7 +22,7 @@ io.on("connection", async (socket: Socket) => {
     const isBaned = Math.floor((data.ban - Date.now()) / 1000 / 60);
     
     if (isBaned >= 1) {
-      socket.emit("BANED", isBaned);
+      socket.emit("BANED", data.ban - Date.now());
       return socket.disconnect();
     }
 
