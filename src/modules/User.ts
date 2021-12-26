@@ -15,6 +15,7 @@ import {
 } from '../libs';
 import { adsBonus, getSubscribeBonus, getTimeoutAdsBonus } from "./events";
 import { giveUser } from "./helpers";
+import database from "../database";
 
 const eForm = new expFormatting;
 const tFormatting = new timeFormatting;
@@ -29,7 +30,6 @@ class User {
   private _Markups: Markups;
   private _Socket: Socket;
   private _ListUser: ListUser;
-  private _Blocked: number;
   private _Id: number;
   private _Checkin: string;
   private _Ping: number;
@@ -42,7 +42,6 @@ class User {
     this._Id = options.id;
     this._Checkin = options.date;
     this._Ping = Date.now();
-    this._Blocked = 1;
     this._ListUser = options.listUsers;
     this._Markups = newMarkups({tFormatting: tFormatting, id: this._Id, checkin: this._Checkin});
     this._Exp = options.exp;
@@ -67,26 +66,25 @@ class User {
   private event = () => {
     this._Socket.onAny(async (event, options) => {
       rateLimiter.consume(this._Id)
-        .then(() => this._Blocked = 1)
-        .catch(() => this._Blocked = Date.now());
+        .then(() => {})
+        .catch(() => { 
+          database("SET_BLOCK", { id: this._Id, count: 6 });
+          this.disconnect();
+        });
 
       const bonus = {
         money: (config.restrictions.bonusMoney * config.restrictions.bonusFactory) * this.getLevel,
         exp: (config.restrictions.bonusExp * config.restrictions.bonusFactory) * this.getLevel,
       }
 
-      if (this._Blocked === 1) {
-        switch (event) {
-          case "ADS_BONUS": await giveUser({user: this, money: bonus.money, exp: bonus.exp, type: "bonus", per: " за просмотр рекламы"}); return await adsBonus({user: this});
-          case "PING": this.set.ping(); return await getTimeoutAdsBonus({user: this});
-          case "ADS_TIMEOUT": return await getTimeoutAdsBonus({user: this});
-          case "GET_ITEMS": return this.send("SHOP", await this._Markups.getBusinesses());
-          case "SUBSCRIBE_GROUP": return await getSubscribeBonus({user: this, params: options});
-          case "GET_JOBS": return this.send("GET_JOBS", await this._Markups.getJobs());
-          default: return console.log("INCORRECT_ACTION:", event);
-        }
-      } else {
-        this.disconnect();
+      switch (event) {
+        case "ADS_BONUS": await giveUser({user: this, money: bonus.money, exp: bonus.exp, type: "bonus", per: " за просмотр рекламы"}); return await adsBonus({user: this});
+        case "PING": this.set.ping(); return await getTimeoutAdsBonus({user: this});
+        case "ADS_TIMEOUT": return await getTimeoutAdsBonus({user: this});
+        case "GET_ITEMS": return this.send("SHOP", await this._Markups.getBusinesses());
+        case "SUBSCRIBE_GROUP": return await getSubscribeBonus({user: this, params: options});
+        case "GET_JOBS": return this.send("GET_JOBS", await this._Markups.getJobs());
+        default: return console.log("INCORRECT_ACTION:", event);
       }
     })
   }
@@ -97,7 +95,6 @@ class User {
       online: reduceNumber(this._ListUser.length),
       balance: reduceNumber(this._Balance),
       exp: eForm.getLevel(this._Exp).front,
-      blocked: this._Blocked !== 1,
       adRollback: config.restrictions.adRollback * 60,
       rating: 1,
       transfer: {

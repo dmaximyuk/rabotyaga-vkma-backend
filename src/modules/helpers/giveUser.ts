@@ -1,5 +1,6 @@
 import { User } from "../index";
-import { mongodb, reduceNumber } from "../../libs";
+import { reduceNumber } from "../../libs";
+import database from "../../database";
 import { sendExp, sendFallback, sendMessage, sendMoney } from ".";
 
 type TProps = {
@@ -13,23 +14,16 @@ type TProps = {
 
 const giveUser = async (props: TProps) => {
   const { user, exp = undefined, money = undefined, bonus = false, type, per = ''} = props;
-  const { id, checkin } = user;
-  const data: any = await mongodb({
-    usr: { id: id, checkin: checkin },
-    type: "GET",
-  });
+  const { id } = user;
+  const data: any = await database("GET_USER", { id: id });
 
   data.balance += money || 0;
   data.exp += exp || 0;
   if ( bonus ) data.bonus = Date.now() + 1000 * 60 * 20;
 
-  let save = await mongodb({
-    usr: { id: id, checkin: checkin },
-    newDate: data,
-    type: "SAVE",
-  });
+  let save: any= await database("SET_USER", { id: id, params: data });
 
-  if (save === "SUCESSFUL") {
+  if (save ) {
     for (let key in props) {
       switch (key) {
         case "money":
