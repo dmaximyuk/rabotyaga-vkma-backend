@@ -93,7 +93,7 @@ class User {
     const dataStartApp = {
       checkin: this.checkin,
       online: reduceNumber(this._ListUser.length),
-      balance: reduceNumber(this._Balance),
+      balance: this._Balance,
       exp: eForm.getLevel(this._Exp).front,
       adRollback: config.restrictions.adRollback * 60,
       rating: 1,
