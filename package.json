@@ -2,14 +2,12 @@
   "name": "backend-the-richest-ts",
   "scripts": {
     "watch": "tsc --watch --preserveWatchOutput --pretty",
-    "dev": "cross-env NODE_ENV=development nodemon",
+    "nodemon": "cross-env NODE_ENV=development nodemon",
+    "dev": "concurrently --kill-others \"yarn watch\" \"yarn nodemon\"",
     "build": "rimraf dist && tsc",
     "start": "node dist/index.js"
   },
   "dependencies": {
-    "@types/intl": "^1.2.0",
-    "@types/node-fetch": "^2.5.10",
-    "cross-env": "^7.0.3",
     "crypto": "^1.0.1",
     "dotenv": "^10.0.0",
     "eiows": "^3.6.0",
@@ -27,6 +25,10 @@
   "devDependencies": {
     "@types/node": "latest",
     "@types/node-cron": "^2.0.3",
+    "@types/intl": "^1.2.0",
+    "@types/node-fetch": "^2.5.10",
+    "concurrently": "^7.2.2",
+    "cross-env": "^7.0.3",
     "fastify-tsconfig": "^1.0.1",
     "nodemon": "^2.0.7",
     "prettier": "^2.3.0",
