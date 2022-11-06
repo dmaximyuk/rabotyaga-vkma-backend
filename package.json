@@ -2,7 +2,7 @@
   "name": "rabotyaga-vkma-frontend",
   "scripts": {
     "server": "nodemon --watch \"src/**\" --ext \"ts,json\" --ignore \"src/**/*.spec.ts\" --exec \"ts-node src/index.ts\"",
-    "build": "cross-env NODE_ENV=prod node esbuild/esbuild-prod.js",
+    "build": "cross-env NODE_ENV=prod tsc",
     "prettier": "prettier --write ./"
   },
   "dependencies": {

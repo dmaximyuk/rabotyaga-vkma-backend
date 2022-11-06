@@ -1,5 +1,4 @@
 import { ParsedUrlQuery } from "querystring";
-import ListUser from "./modules/ListUsers";
 import { ObjectId } from "mongoose";
 
 export type TOptionsRoom = {
@@ -45,7 +44,6 @@ export type TOptionsUser = {
   date: string;
   bonus: number;
   balance: number;
-  listUsers: ListUser;
 };
 
 export type TMongoDB = {
