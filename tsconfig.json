@@ -1,5 +1,4 @@
 {
-  "extends": "fastify-tsconfig",
   "compilerOptions": {
     "target": "es6",
     "sourceMap": false,
@@ -16,11 +15,8 @@
     "experimentalDecorators": true,
     "skipLibCheck": true,
     "baseUrl": "./src/",
+    "moduleResolution": "Node"
   },
-  "exclude": [
-    "node_modules"
-  ],
-  "include": [
-    "./src/**/*.ts"
-  ]
+  "exclude": ["node_modules"],
+  "include": ["./src/**/*.ts"]
 }

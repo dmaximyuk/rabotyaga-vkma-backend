@@ -62,14 +62,14 @@ export type TMethods = {
 };
 
 export type TUserJson = {
-  _id: ObjectId,
-  id: number,
-  checkin: string,
-  exp: number,
-  balance: number,
-  bonus: number,
-  __v: number,
-}
+  _id: ObjectId;
+  id: number;
+  checkin: string;
+  exp: number;
+  balance: number;
+  bonus: number;
+  __v: number;
+};
 
 export type TLogTypes =
   | "GET_JOB_MONEY"
@@ -89,20 +89,23 @@ export type TLogTypes =
 export type TItems = {};
 
 export type TDatabase = {
-  START_APP: { id: number, checkin: string };
+  START_APP: { id: number; checkin: string };
   GET_USER: { id: number };
-  SET_USER: { id: number, params: TUserJson };
+  SET_USER: { id: number; params: TUserJson };
   GET_ADMIN: { id: number };
   SET_ADMIN: { id: number };
   GET_INVENTORY: { id: number };
-  SET_INVENTORY: { id: number, item: number };
+  SET_INVENTORY: { id: number; item: number };
   GET_PURCHASES: { id: number };
-  SET_PURCHASES: { id: number,params: any };
+  SET_PURCHASES: { id: number; params: any };
   GET_LOG: { id: number };
-  SET_LOG: { id: number, type: TLogTypes, payload: string };
+  SET_LOG: { id: number; type: TLogTypes; payload: string };
   GET_PROMO: { id: number };
-  SET_PROMO: { id: number, text: string, count: number };
-  SET_BLOCK: { id: number, count: 1 | 2 | 3 | 6 | 12 | 24 | 48 | 72 | 168 | 8760 };
+  SET_PROMO: { id: number; text: string; count: number };
+  SET_BLOCK: {
+    id: number;
+    count: 1 | 2 | 3 | 6 | 12 | 24 | 48 | 72 | 168 | 8760;
+  };
 };
 
 export type TDatabaseArguments<Data extends TDatabase> = {

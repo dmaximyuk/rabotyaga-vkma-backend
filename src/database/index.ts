@@ -27,7 +27,12 @@ const database: TDatabaseVoid = async (type, data) => {
 
   switch (options.type) {
     case "START_APP":
-      return await UserSchema.findOne({ id: id }) || await new UserSchema(UserJson(id, { checkin: options.data.checkin })).save();
+      return (
+        (await UserSchema.findOne({ id: id })) ||
+        (await new UserSchema(
+          UserJson(id, { checkin: options.data.checkin })
+        ).save())
+      );
     case "GET_USER":
       return await UserSchema.findOne({ id: id });
     case "SET_USER":
@@ -54,7 +59,10 @@ const database: TDatabaseVoid = async (type, data) => {
     case "SET_PROMO":
       return methods.debug(id, options.data.text, options.data.count);
     case "SET_BLOCK":
-      return await UserSchema.findOneAndUpdate({ id: id }, { ban: Date.now() + ( options.data.count * 1000 * 60 * 60 ) });
+      return await UserSchema.findOneAndUpdate(
+        { id: id },
+        { ban: Date.now() + options.data.count * 1000 * 60 * 60 }
+      );
   }
 };
 
