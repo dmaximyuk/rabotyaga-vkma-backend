@@ -20,3 +20,5 @@ yarn-error.log*
 
 .vscode
 *.d.ts
+
+/src/*.js
