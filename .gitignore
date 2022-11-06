@@ -5,7 +5,7 @@ dist
 
 package-lock.json
 yarn-error.txt
-yarn.lock
+*.lock
 
 .DS_Store
 .env
@@ -21,4 +21,5 @@ yarn-error.log*
 .vscode
 *.d.ts
 
+/src/*/*.js
 /src/*.js
