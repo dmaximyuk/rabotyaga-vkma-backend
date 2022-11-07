@@ -40,6 +40,4 @@ Create ```.env``` file in project and paste code in to file:
 PORT=11111 # use your port, recommended: 3001 or 16888.
 TOKEN=qwerty11111 # token vk-api
 SECRET_KEY_VKMA=eW5uzM9637VMvrB5HmNC # vkma secret key
-
-process.env.TS_NODE_PROJECT=./tsconfig.json # NOT CHANGE, is absolute path
 ```
