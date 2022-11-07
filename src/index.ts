@@ -1,12 +1,12 @@
 require("dotenv").config("../.env");
 
-import { Server } from "./libs";
+import { Server, EEvents } from "./libs";
 
 const PORT = process.env.PORT;
 const wss = new Server("/");
 
-if (!PORT) {
-  throw new Error("Port is undefined.");
-} else {
-  wss.listen(+PORT);
-}
+if (!PORT) throw new Error("Port is undefined.");
+
+wss.on(EEvents.connection, async (ws) => console.log("connect:", ws));
+wss.on(EEvents.disconnect, async (ws) => console.log("disconnect:", ws));
+wss.listen(+PORT);

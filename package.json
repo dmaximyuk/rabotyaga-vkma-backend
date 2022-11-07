@@ -19,6 +19,7 @@
     "vk-io": "^4.2.0"
   },
   "devDependencies": {
+    "@types/cli-color": "^2.0.2",
     "@types/intl": "^1.2.0",
     "@types/node": "latest",
     "@types/node-cron": "^2.0.3",
