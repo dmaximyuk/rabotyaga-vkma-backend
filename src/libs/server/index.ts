@@ -3,7 +3,7 @@ import chalk from "chalk";
 
 import logger from "libs/logger";
 
-type TWSFunction = (ws: WS.WebSocket) => void;
+type TWebSocketsFunction = (ws: WS.WebSocket) => void;
 type TRouteType = "START_APP";
 type TRouteMsg = { type: TRouteType; params: object };
 enum EEvents {
@@ -13,8 +13,8 @@ enum EEvents {
 
 class Server {
   private socket = WS.App();
-  private connectFunction: TWSFunction;
-  private disconnectFunction: TWSFunction;
+  private connectFunction: TWebSocketsFunction;
+  private disconnectFunction: TWebSocketsFunction;
 
   constructor(url: string) {
     this.connectFunction;
@@ -50,7 +50,7 @@ class Server {
     } catch (e) {}
   };
 
-  on = (event: EEvents, callback: TWSFunction) => {
+  on = (event: EEvents, callback: TWebSocketsFunction) => {
     switch (event) {
       case EEvents.connection:
         return (this.connectFunction = callback);
