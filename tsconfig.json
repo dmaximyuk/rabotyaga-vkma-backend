@@ -1,8 +1,24 @@
 {
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  },
+
   "compilerOptions": {
-    "target": "es6",
-    "sourceMap": false,
+    "target": "ESNext",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+
     "outDir": "./dist",
+    "baseUrl": "./src",
+    "paths": {
+      "app/*": ["./*"],
+      "engine/*": ["engine/*"],
+      "libs/*": ["libs/*"],
+      "modules/*": ["modules/*"]
+    },
+
+    "sourceMap": false,
+
     "noImplicitAny": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
@@ -11,12 +27,17 @@
     "noImplicitReturns": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
     "skipLibCheck": true,
-    "baseUrl": "./src/",
-    "moduleResolution": "Node"
+
+    "typeRoots": ["./node_modules/@types", "./src/types.ts"],
+
+    "plugins": [
+      {
+        "transform": "typescript-transform-paths"
+      }
+    ]
   },
-  "exclude": ["node_modules"],
+
+  "exclude": ["node_modules", "dist", ".vscode", ".husky"],
   "include": ["./src/**/*.ts"]
 }

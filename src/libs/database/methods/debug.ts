@@ -1,2 +1,2 @@
-import { TDebug } from "../../../types";
+import { TDebug } from "../../../engine/types";
 export default (el: TDebug) => console.log("debug-db:", el);

@@ -13,7 +13,11 @@ import { UserSchema, UserJson } from "./scheme";
 moment.locale("ru");
 
 // Types
-import { TDatabase, TDatabaseArguments, TDatabaseVoid } from "../../types";
+import {
+  TDatabase,
+  TDatabaseArguments,
+  TDatabaseVoid,
+} from "../../engine/types";
 
 mongoose.connect("mongodb://127.0.0.1:27017/HardWorker", {
   useUnifiedTopology: true,

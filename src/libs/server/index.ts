@@ -1,11 +1,11 @@
 import WS from "uWebSockets.js";
 import chalk from "chalk";
 
-import logger from "libs/logger";
+import { logger } from "libs";
 
-type TWebSocketsFunction = (ws: WS.WebSocket) => void;
 type TRouteType = "START_APP";
 type TRouteMsg = { type: TRouteType; params: object };
+type TWebSocketsFunction = (ws: WS.WebSocket) => void;
 enum EEvents {
   connection,
   disconnect,
