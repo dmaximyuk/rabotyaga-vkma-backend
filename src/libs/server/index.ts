@@ -40,13 +40,6 @@ class Server {
       const msgToString = Buffer.from(msg).toString();
       const { type, params }: TRouteMsg = JSON.parse(msgToString);
 
-      const data = JSON.stringify({
-        type: "START_APP",
-        params: {
-          name: "Dmitriy",
-        },
-      });
-
       switch (type) {
         case "START_APP":
           ws.send(JSON.stringify(params), isBinary);
