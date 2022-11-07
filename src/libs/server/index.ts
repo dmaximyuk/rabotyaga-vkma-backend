@@ -3,14 +3,13 @@ import chalk from "chalk";
 
 import logger from "libs/logger";
 
+type TWSFunction = (ws: WS.WebSocket) => void;
+type TRouteType = "START_APP";
+type TRouteMsg = { type: TRouteType; params: object };
 enum EEvents {
   connection,
   disconnect,
 }
-
-type TWSFunction = (ws: WS.WebSocket) => void;
-type TRouteType = "START_APP";
-type TRouteMsg = { type: TRouteType; params: object };
 
 class Server {
   private socket = WS.App();
