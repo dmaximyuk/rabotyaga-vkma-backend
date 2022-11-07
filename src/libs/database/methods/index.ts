@@ -1,5 +1,5 @@
 // Types
-import { TDebug, TMethods } from "../../types";
+import { TDebug, TMethods } from "../../../types";
 
 // Modules
 import debug from "./debug";

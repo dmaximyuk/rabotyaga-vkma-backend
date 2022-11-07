@@ -1,13 +1,16 @@
 import WS from "uWebSockets.js";
 import chalk from "chalk";
 
+import logger from "libs/logger";
+
 enum EEvents {
   connection,
   disconnect,
 }
 
-type TRouteType = "START_APP";
 type TWSFunction = (ws: WS.WebSocket) => void;
+type TRouteType = "START_APP";
+type TRouteMsg = { type: TRouteType; params: object };
 
 class Server {
   private socket = WS.App();
@@ -20,24 +23,39 @@ class Server {
     this.socket.ws(url, {
       compression: WS.DEDICATED_COMPRESSOR_128KB,
       sendPingsAutomatically: true,
-      maxPayloadLength: 16 * 1024,
+      maxPayloadLength: 1024,
       idleTimeout: 0,
       open: async (ws) => this.connectFunction(ws),
-      // message: async (ws, msg, isBinary) => console.log(ws, msg, isBinary),
-      message: async (_ws, msg, _isBinary) => this.route(msg),
+      message: async (ws, msg, isBinary) => this.route(ws, msg, isBinary),
       close: async (ws) => this.disconnectFunction(ws),
     });
   }
 
-  private route = (msg: ArrayBuffer) => {
-    const type = Buffer.from(msg).toString() as TRouteType;
+  private route = (
+    ws: WS.WebSocket,
+    msg: ArrayBuffer,
+    isBinary: boolean
+  ): void | Function => {
+    try {
+      const msgToString = Buffer.from(msg).toString();
+      const { type, params }: TRouteMsg = JSON.parse(msgToString);
 
-    switch (type) {
-      case "START_APP":
-        return console.log(chalk.red("Start app params."));
-      default:
-        return console.warn("Socket route is not type.");
-    }
+      const data = JSON.stringify({
+        type: "START_APP",
+        params: {
+          name: "Dmitriy",
+        },
+      });
+
+      switch (type) {
+        case "START_APP":
+          ws.send(JSON.stringify(params), isBinary);
+          return logger(chalk.red("Start app params."));
+        default:
+          ws.send(JSON.stringify(params), isBinary);
+          return logger("Socket route is not type.");
+      }
+    } catch (e) {}
   };
 
   on = (event: EEvents, callback: TWSFunction) => {
