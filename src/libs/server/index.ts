@@ -1,6 +1,6 @@
 import WS from "uWebSockets.js";
 import chalk from "chalk";
-import killPort from "kill-port";
+// import killPort from "kill-port";
 
 import { logger } from "@app/libs";
 
@@ -62,8 +62,6 @@ class Server {
 
   listen = (PORT: number) => {
     try {
-      killPort(PORT, "tcp").then(logger(chalk.red("Port is killed.")));
-
       this.socket.listen(PORT, (listenSocket) => {
         if (!listenSocket) {
           return console.error("The server failed to start due to an error");

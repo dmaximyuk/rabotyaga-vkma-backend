@@ -1,5 +1,5 @@
 const logger = (...args: any) => {
-  if (process.env.NODE_ENV === "prod") {
+  if (process.env.NODE_ENV === "dev") {
     console.log(...args);
   }
 

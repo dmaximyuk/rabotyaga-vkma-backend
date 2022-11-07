@@ -1,12 +1,11 @@
 {
   "name": "rabotyaga-vkma-backend",
-  "type": "commonjs",
   "scripts": {
     "clear:all": "rm -rf ./dist && rm -rf ./node_modules",
     "clear:build": "rm -rf ./dist",
     "clear:deps": "rm -rf ./node_modules",
-    "start": "cross-env NODE_ENV=prod node ./dist/index.js",
-    "server": "cross-env NODE_ENV=dev ts-node-dev --watch --no-notify -r tsconfig-paths/register src/index.ts",
+    "start": "node ./dist/index.js",
+    "server": "cross-env NODE_ENV=dev ts-node-dev --respawn --watch --no-notify -r tsconfig-paths/register src/index.ts",
     "build": "cross-env NODE_ENV=prod ttsc -p tsconfig.json",
     "prebuild": "npm run clear:build",
     "prettier": "prettier --write ./**/*"
@@ -16,7 +15,6 @@
     "cross-env": "^7.0.3",
     "crypto": "^1.0.1",
     "dotenv": "^10.0.0",
-    "kill-port": "^2.0.1",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
     "mongoose": "^5.12.10",
