@@ -1,7 +1,8 @@
 import WS from "uWebSockets.js";
 import chalk from "chalk";
+import killPort from "kill-port";
 
-import { logger } from "libs";
+import { logger } from "@app/libs";
 
 type TRouteType = "START_APP";
 type TRouteMsg = { type: TRouteType; params: object };
@@ -17,8 +18,8 @@ class Server {
   private disconnectFunction: TWebSocketsFunction;
 
   constructor(url: string) {
-    this.connectFunction;
-    this.disconnectFunction;
+    this.connectFunction = () => {};
+    this.disconnectFunction = () => {};
     this.socket.ws(url, {
       compression: WS.DEDICATED_COMPRESSOR_128KB,
       sendPingsAutomatically: true,
@@ -59,14 +60,19 @@ class Server {
     }
   };
 
-  listen = (PORT: number) =>
-    this.socket.listen(PORT, (listenSocket) => {
-      if (!listenSocket) {
-        return console.error("The server failed to start due to an error");
-      }
+  listen = (PORT: number) => {
+    try {
+      killPort(PORT, "tcp").then(logger(chalk.red("Port is killed.")));
 
-      console.log(chalk.black(`Server running on: localhost:${PORT}`));
-    });
+      this.socket.listen(PORT, (listenSocket) => {
+        if (!listenSocket) {
+          return console.error("The server failed to start due to an error");
+        }
+
+        console.log(chalk.black(`Server running on: localhost:${PORT}`));
+      });
+    } catch (e) {}
+  };
 }
 
 export { EEvents };

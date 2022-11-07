@@ -1,6 +1,6 @@
 require("dotenv").config(".env");
 
-import { Server, EEvents } from "libs";
+import { Server, EEvents } from "@app/libs";
 
 const PORT = process.env.PORT;
 const wss = new Server("/");

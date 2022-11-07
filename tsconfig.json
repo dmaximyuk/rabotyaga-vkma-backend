@@ -2,42 +2,50 @@
   "ts-node": {
     "require": ["tsconfig-paths/register"]
   },
-
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "CommonJS",
-    "moduleResolution": "Node",
-
-    "outDir": "./dist",
-    "baseUrl": "./src",
-    "paths": {
-      "app/*": ["./*"],
-      "engine/*": ["engine/*"],
-      "libs/*": ["libs/*"],
-      "modules/*": ["modules/*"]
-    },
-
+    "target": "es2015",
+    "module": "commonjs",
+    "allowJs": true,
+    "checkJs": true,
+    "declaration": false,
+    "declarationMap": false,
     "sourceMap": false,
-
+    "outDir": "dist/",
+    "removeComments": true,
+    "strict": true,
     "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
     "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "@app/*": ["./src/*"]
+    },
+    "typeRoots": ["./node_modules/@types", "./src/typings"],
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "emitDeclarationOnly": false,
+    "forceConsistentCasingInFileNames": false,
     "skipLibCheck": true,
-
-    "typeRoots": ["./node_modules/@types", "./src/types.ts"],
-
     "plugins": [
       {
         "transform": "typescript-transform-paths"
       }
     ]
   },
-
-  "exclude": ["node_modules", "dist", ".vscode", ".husky"],
-  "include": ["./src/**/*.ts"]
+  "include": ["./src/**/*.ts", "./src/**/*.d.ts"],
+  "exclude": [
+    "./node_modules",
+    "./test",
+    "./build",
+    "**/*.spec.ts",
+    "**/*.test.ts"
+  ]
 }
