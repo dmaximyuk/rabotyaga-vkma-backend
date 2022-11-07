@@ -1,6 +1,5 @@
 import WS from "uWebSockets.js";
 import chalk from "chalk";
-// import killPort from "kill-port";
 
 import { logger } from "@app/libs";
 
