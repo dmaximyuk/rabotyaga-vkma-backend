@@ -1,17 +1,20 @@
 import mongoose from "mongoose";
 
-const UserSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     id: Number,
     checkin: String,
-    ban: Number,
-    exp: Number,
+    experience: Number,
     balance: Number,
-    bonus: Number,
+    ban: {
+      date: Number,
+      time: Number,
+      status: Boolean,
+    },
   },
   {
     collection: "users",
   }
 );
 
-export default mongoose.model("users", UserSchema);
+export default mongoose.model("users", userSchema);

@@ -2,24 +2,28 @@ import moment from "moment";
 import "moment/locale/ru";
 
 import { connectionDatabase } from "./modules";
-import { UserSchema } from "./scheme";
+import { userSchema } from "./scheme";
+import { TUserDataHydratedDocument } from "@app/engine/types";
 
 moment.locale("ru");
-connectionDatabase("rabotyaga");
 
-type TUserData = any;
+connectionDatabase("rabotyaga");
 
 class Database {
   private maxBalance: number;
+  private maxExp: number;
+  private maxVersion: number;
 
   constructor() {
     this.maxBalance = 1000000000000;
+    this.maxExp = 1000000;
+    this.maxVersion = 255;
   }
 
   get() {
     return {
       user: async (id: number) => {
-        return await UserSchema.findOne({ id: id });
+        return await userSchema.findOne({ id: id });
       },
       rating: async () => {
         return [{ id: 123, name: "Dmitriy" }];
@@ -29,16 +33,21 @@ class Database {
 
   set() {
     return {
-      user: async (id: number, data: TUserData) => {
-        const verificatedData = this.userVerification(data);
-        return await UserSchema.findOneAndUpdate({ id: id }, verificatedData);
+      user: async (id: number, data: TUserDataHydratedDocument) => {
+        const isVerificateData = this.dataVerification(data);
+        return await userSchema.findOneAndUpdate({ id: id }, isVerificateData);
       },
     };
   }
 
-  private userVerification = (data: TUserData) => {
+  private dataVerification = (
+    data: TUserDataHydratedDocument
+  ): TUserDataHydratedDocument => {
     if (data.balance >= this.maxBalance) data.balance = this.maxBalance;
-    ++data.params.__v;
+    if (data.exp >= this.maxExp) data.exp = this.maxExp;
+    if (data.__v >= this.maxVersion) data.__v = this.maxVersion;
+
+    ++data.__v;
     return data;
   };
 }

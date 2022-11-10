@@ -1,2 +1,2 @@
-export { default as UserSchema } from "./userSchema";
-export { default as UserJson } from "./userJson";
+export { default as userSchema } from "./userSchema";
+export { default as userJson } from "./userJson";
