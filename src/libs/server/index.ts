@@ -1,10 +1,8 @@
 import WS from "uWebSockets.js";
-import chalk from "chalk";
 
 import { logger } from "@app/libs";
 
-type TRouteType = "START_APP";
-type TRouteMsg = { type: TRouteType; params: object };
+type TRouteMsg = { type: "START_APP"; params: object };
 type TWebSocketsFunction = (ws: WS.WebSocket) => void;
 enum EEvents {
   connection,
@@ -42,10 +40,10 @@ class Server {
       switch (type) {
         case "START_APP":
           ws.send(JSON.stringify(params), isBinary);
-          return logger(chalk.red("Start app params."));
+          return logger.debug("Start app params.");
         default:
           ws.send(JSON.stringify(params), isBinary);
-          return logger("Socket route is not type.");
+          return logger.debug("Socket route is not type.");
       }
     } catch (e) {}
   };
@@ -63,10 +61,10 @@ class Server {
     try {
       this.socket.listen(PORT, (listenSocket) => {
         if (!listenSocket) {
-          return console.error("The server failed to start due to an error");
+          return logger.error("The server failed to start due to an error");
         }
 
-        console.log(chalk.black(`Server running on: localhost:${PORT}`));
+        logger.server(`Server running on: localhost:${PORT}`);
       });
     } catch (e) {}
   };

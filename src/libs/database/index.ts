@@ -15,9 +15,9 @@ class Database {
   private maxVersion: number;
 
   constructor() {
-    this.maxBalance = 1000000000000;
-    this.maxExp = 1000000;
-    this.maxVersion = 255;
+    this.maxBalance = 1_000_000_000_000;
+    this.maxExp = 1_000_000;
+    this.maxVersion = 1_000;
   }
 
   get() {
