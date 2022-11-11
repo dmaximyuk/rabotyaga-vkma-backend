@@ -4,8 +4,12 @@ const logger = <T>(...args: Array<T>) =>
   process.env.NODE_ENV === "dev" ? console.log(...args) : () => {};
 
 export default {
-  server: <T>(...args: Array<T>) => logger(chalk.black(...args)),
-  log: <T>(...args: Array<T>) => logger(chalk.blue(...args)),
-  debug: <T>(...args: Array<T>) => logger(chalk.white(...args)),
-  error: <T>(...args: Array<T>) => logger(chalk.red(...args)),
+  server: <T, K>(args1: K, ...args: Array<T>) =>
+    logger(chalk.black(args1, ...args)),
+  log: <T, K>(args1: K, ...args: Array<T>) =>
+    logger(chalk.blue(args1, ...args)),
+  debug: <T, K>(args1: K, ...args: Array<T>) =>
+    logger(chalk.white(args1, ...args)),
+  error: <T, K>(args1: K, ...args: Array<T>) =>
+    logger(chalk.red(args1, ...args)),
 };
