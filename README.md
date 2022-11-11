@@ -22,8 +22,8 @@ yarn
 # Run project.
 Server
 ```bash
-npm run serve # or
-yarn run serve
+npm run start:dev # or
+yarn run start:dev
 ```
 Production
 ```bash
@@ -31,7 +31,7 @@ npm run build
 npm run start #or
 
 yarn run build
-yarn run serve
+yarn run start
 ```
 
 # Configure ```.env```
