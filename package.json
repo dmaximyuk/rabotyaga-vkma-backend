@@ -5,8 +5,9 @@
     "clear:build": "rm -rf ./dist",
     "clear:deps": "rm -rf ./node_modules",
     "start": "cross-env NODE_ENV=prod node ./dist/index.js",
-    "server": "cross-env NODE_ENV=dev ts-node-dev --respawn --watch --no-notify -r tsconfig-paths/register src/index.ts",
+    "start:dev": "cross-env NODE_ENV=dev ts-node-dev --respawn --watch --no-notify -r tsconfig-paths/register src/index.ts",
     "build": "cross-env NODE_ENV=prod ttsc -p tsconfig.json",
+    "build:dev": "cross-env NODE_ENV=dev ttsc -p tsconfig.json",
     "prebuild": "npm run clear:build",
     "prettier": "prettier --write ./**/*"
   },

@@ -1,61 +1,23 @@
 import WS from "uWebSockets.js";
 
 import { logger } from "@app/libs";
+import { User } from "@app/modules";
 
-type TRouteMsg = { type: "START_APP"; params: object };
-type TWebSocketsFunction = (ws: WS.WebSocket) => void;
-enum EEvents {
-  connection,
-  disconnect,
-}
-
-class Server {
+class Server extends User {
   private socket = WS.App();
-  private connectFunction: TWebSocketsFunction;
-  private disconnectFunction: TWebSocketsFunction;
 
   constructor(url: string) {
-    this.connectFunction = () => {};
-    this.disconnectFunction = () => {};
+    super();
     this.socket.ws(url, {
       compression: WS.DEDICATED_COMPRESSOR_128KB,
       sendPingsAutomatically: true,
       maxPayloadLength: 1024,
       idleTimeout: 0,
-      open: async (ws) => this.connectFunction(ws),
-      message: async (ws, msg, isBinary) => this.route(ws, msg, isBinary),
-      close: async (ws) => this.disconnectFunction(ws),
+      open: async (ws) => this.connect(ws),
+      message: async (ws, msg, isBinary) => this.events(ws, msg, isBinary),
+      close: async (ws) => this.disconnect(ws),
     });
   }
-
-  private route = (
-    ws: WS.WebSocket,
-    msg: ArrayBuffer,
-    isBinary: boolean
-  ): void | Function => {
-    try {
-      const msgToString = Buffer.from(msg).toString();
-      const { type, params }: TRouteMsg = JSON.parse(msgToString);
-
-      switch (type) {
-        case "START_APP":
-          ws.send(JSON.stringify(params), isBinary);
-          return logger.debug("Start app params.");
-        default:
-          ws.send(JSON.stringify(params), isBinary);
-          return logger.debug("Socket route is not type.");
-      }
-    } catch (e) {}
-  };
-
-  on = (event: EEvents, callback: TWebSocketsFunction) => {
-    switch (event) {
-      case EEvents.connection:
-        return (this.connectFunction = callback);
-      case EEvents.disconnect:
-        return (this.disconnectFunction = callback);
-    }
-  };
 
   listen = (PORT: number) => {
     try {
@@ -70,5 +32,4 @@ class Server {
   };
 }
 
-export { EEvents };
 export default Server;

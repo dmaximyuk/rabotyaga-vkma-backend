@@ -1,9 +1,6 @@
-// Libs
 import Server from "./server";
 import database from "./database";
 import logger from "./logger";
+import rateLimiter from "./rateLimiter";
 
-// Libs Types
-import { EEvents } from "./server";
-
-export { Server, EEvents, database, logger };
+export { Server, database, logger, rateLimiter };

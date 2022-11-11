@@ -58,4 +58,4 @@ export type TLog = HydratedDocument<{
   type: TOperationType;
   value: "GET" | "SELL" | "BUY" | "";
 }>;
-export type TRouteMsg = { type: "START_APP"; params: object };
+export type TEventsMessage = { type: "START_APP" | "TOKEN"; params: object };
