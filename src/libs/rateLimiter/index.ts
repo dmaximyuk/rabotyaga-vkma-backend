@@ -1,18 +1,12 @@
 const rateLimit = (interval: number): Function => {
   let date: number | undefined = undefined;
 
-  setInterval(() => {
-    date = undefined;
-  }, interval);
+  setInterval(() => (date = undefined), interval);
 
   return (): boolean => {
-    const newDate = Date.now() + interval;
+    if (date && Date.now() + interval >= date) return true;
 
-    if (date && newDate >= date) {
-      return true;
-    }
-
-    date = newDate;
+    date = Date.now() + interval;
     return false;
   };
 };
