@@ -1,37 +1,43 @@
 # Pre-install
 Choose node version
-> node -v <br/>
-> 16.18.0 <br/>
+```bash
+$ node -v
+$ 16.18.0
+```
 
 Choose yarn or npm  version.
 
 Npm
-> npm -v <br/>
-> 8.19.2 <br/>
+```bash
+$ npm -v
+$ 8.19.2
+```
 
 Yarn
-> yarn -v <br/>
-> 1.22.19 <br/>
+```bash
+$ yarn -v
+$ 1.22.19
+```
 
 # Install
 Install packages.
 ```bash
-npm i # or
-yarn
+$ npm i # or
+$ yarn
 ```
 # Run project.
 Server
 ```bash
-npm run start:dev # or
-yarn run start:dev
+$ npm run start:dev # or
+$ yarn run start:dev
 ```
 Production
 ```bash
-npm run build
-npm run start #or
+$ npm run build
+$ npm run start #or
 
-yarn run build
-yarn run start
+$ yarn run build
+$ yarn run start
 ```
 
 # Configure ```.env```
