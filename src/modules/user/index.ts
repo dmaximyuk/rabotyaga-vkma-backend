@@ -8,9 +8,16 @@ type TFunc = (ws: WS.WebSocket) => void | Function;
 
 class User {
   private isLimit: Function;
+  private fallbackMessage: { type: "LIMITER"; params: { msg: string } };
 
   constructor() {
     this.isLimit = rateLimiter(2000);
+    this.fallbackMessage = {
+      type: "LIMITER",
+      params: {
+        msg: "Stop it!",
+      },
+    };
   }
 
   protected connect: TFunc = (_ws) => {
@@ -27,19 +34,7 @@ class User {
     isBinary: boolean
   ): void | Function => {
     try {
-      if (this.isLimit()) {
-        this.send(
-          ws,
-          {
-            type: "LIMITER",
-            params: {
-              msg: "Stop it!",
-            },
-          },
-          isBinary
-        );
-        return;
-      }
+      if (this.isLimit()) return this.send(ws, this.fallbackMessage, isBinary);
 
       const msgToString = Buffer.from(msg).toString();
       const { type, params }: TEventsMessage = JSON.parse(msgToString);
@@ -60,7 +55,7 @@ class User {
     }
   };
 
-  private send = (ws: WS.WebSocket, data: object, isBinary: boolean) => {
+  protected send = (ws: WS.WebSocket, data: object, isBinary: boolean) => {
     try {
       const stringifyData = JSON.stringify(data);
       ws.send(stringifyData, isBinary);
