@@ -23,6 +23,7 @@
     "node-cron": "^3.0.0",
     "node-fetch": "^3.2.10",
     "querystring": "^0.2.1",
+    "rate-limiter-flexible": "^2.4.1",
     "uWebSockets.js": "uNetworking/uWebSockets.js#v20.10.0",
     "vk-io": "^4.2.0"
   },

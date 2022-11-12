@@ -1,64 +1,51 @@
-import WS from "uWebSockets.js";
+import { logger } from "@app/libs";
 
-import { logger, rateLimiter } from "@app/libs";
-
-import { TEventsMessage } from "@app/engine/types";
-
-type TFunc = (ws: WS.WebSocket) => void | Function;
+import { IActions } from "@app/engine/types/index";
 
 class User {
-  private isLimit: Function;
-  private fallbackMessage: { type: "LIMITER"; params: { msg: string } };
+  public id: undefined | number;
 
   constructor() {
-    this.isLimit = rateLimiter(2000);
-    this.fallbackMessage = {
-      type: "LIMITER",
-      params: {
-        msg: "Stop it!",
+    this.id = 123;
+  }
+
+  get() {
+    return {
+      id: this.id,
+    };
+  }
+
+  set() {
+    return {
+      id: (id: number): void => {
+        this.id = id;
       },
     };
   }
 
-  protected connect: TFunc = (_ws) => {
-    logger.log("connect");
-  };
-
-  protected disconnect: TFunc = (_ws) => {
-    logger.log("disconnect");
-  };
-
-  protected events = (
-    ws: WS.WebSocket,
-    msg: ArrayBuffer,
-    isBinary: boolean
-  ): void | Function => {
+  public actions: IActions = ({ socket, send, event, isBinary }) => {
     try {
-      if (this.isLimit()) return this.send(ws, this.fallbackMessage, isBinary);
-
-      const msgToString = Buffer.from(msg).toString();
-      const { type, params }: TEventsMessage = JSON.parse(msgToString);
-
-      switch (type) {
-        case "TOKEN":
-          this.send(ws, params, isBinary);
-          return logger.log(params);
+      switch (event) {
+        // ? maybe is not need?
+        // ? case "TOKEN":
+        // ?  return send(socket, {
+        // ?   type: event,
+        // ?    params: { id: 123, name: "Dmitriy" },
+        // ?    isBinary,
+        // ?  });
         case "START_APP":
-          this.send(ws, params, isBinary);
-          return logger.debug("Start app params.");
+          return send(socket, {
+            type: event,
+            params: { id: 123 },
+            isBinary,
+          });
         default:
-          this.send(ws, params, isBinary);
-          return logger.debug("Socket route is not type.");
+          return send(socket, {
+            type: "SERVER_ERR",
+            params: { id: 123 },
+            isBinary,
+          });
       }
-    } catch (e) {
-      logger.error(e);
-    }
-  };
-
-  protected send = (ws: WS.WebSocket, data: object, isBinary: boolean) => {
-    try {
-      const stringifyData = JSON.stringify(data);
-      ws.send(stringifyData, isBinary);
     } catch (e) {
       logger.error(e);
     }

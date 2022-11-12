@@ -1,20 +1,6 @@
-import { ParsedUrlQuery } from "querystring";
-import { HydratedDocument } from "mongoose";
-
-export type TOptionsRoom = {
-  id: string;
-};
-
-export type TMessage = {
-  author: "my" | "you" | "admin";
-  time: string;
-  key: string;
-  read: boolean;
-  message: {
-    value?: string;
-    attach?: string;
-  };
-};
+import type { ParsedUrlQuery } from "querystring";
+import type { HydratedDocument } from "mongoose";
+import type { WebSocket } from "uWebSockets.js";
 
 export type TVKSign =
   | {
@@ -58,4 +44,30 @@ export type TLog = HydratedDocument<{
   type: TOperationType;
   value: "GET" | "SELL" | "BUY" | "";
 }>;
-export type TEventsMessage = { type: "START_APP" | "TOKEN"; params: object };
+export type TEvents = "START_APP" | "TOKEN";
+export type TClientEvents = "START_APP" | "TOKEN" | "LIMITER" | "SERVER_ERR";
+export type TSender = {
+  ws: WebSocket;
+  sender: Function;
+};
+export type TSendFunction = (
+  ws: WebSocket,
+  options: {
+    type: TClientEvents;
+    params: object;
+    isBinary: boolean;
+  }
+) => void;
+export interface IActions {
+  ({
+    socket,
+    send,
+    event,
+    isBinary,
+  }: {
+    socket: WebSocket;
+    send: TSendFunction;
+    event: TEvents;
+    isBinary: boolean;
+  }): void;
+}

@@ -1,6 +1,7 @@
 import Server from "./server";
+import Socket from "./socket";
 import database from "./database";
 import logger from "./logger";
-import rateLimiter from "./rateLimiter";
+import generateParams from "./generateParams";
 
-export { Server, database, logger, rateLimiter };
+export { Socket, database, logger, generateParams, Server };
