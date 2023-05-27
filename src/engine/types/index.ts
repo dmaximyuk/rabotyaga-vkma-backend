@@ -50,7 +50,7 @@ export type TSender = {
   ws: WebSocket;
   sender: Function;
 };
-export type TSendFunction = (
+export type SendFunctionModel = (
   ws: WebSocket,
   options: {
     type: TClientEvents;
@@ -58,7 +58,8 @@ export type TSendFunction = (
     isBinary: boolean;
   }
 ) => void;
-export interface IActions {
+
+export interface ActionsModel {
   ({
     socket,
     send,
@@ -66,7 +67,7 @@ export interface IActions {
     isBinary,
   }: {
     socket: WebSocket;
-    send: TSendFunction;
+    send: SendFunctionModel;
     event: TEvents;
     isBinary: boolean;
   }): void;
