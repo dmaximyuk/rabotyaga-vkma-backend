@@ -4,7 +4,7 @@ import { ERROR_EVENT } from "@app/constants";
 
 export function errorEvent(send: Function, socket: WS.WebSocket) {
   const params = {
-    msg: "Event error",
+    msg: "Error",
   };
 
   return function () {

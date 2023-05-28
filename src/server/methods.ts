@@ -3,9 +3,20 @@ import WS, { HttpRequest, HttpResponse } from "uWebSockets.js";
 import { logger } from "@app/libs";
 import { User } from "@app/modules";
 
-export class Methods extends User {
-  constructor() {
-    super();
+export class Methods {
+  protected messages(
+    ws: WS.WebSocket,
+    msg: ArrayBuffer,
+    isBinary: boolean
+  ): void {
+    const id = ws["0"].userId;
+    const user = listUsers.get(id);
+
+    if (!user) return;
+    console.log(user);
+
+    user.events(ws, msg, isBinary);
+    ws.userId;
   }
 
   protected handshake(
@@ -18,10 +29,8 @@ export class Methods extends User {
     console.log(token);
 
     if (token === "1234") {
-      this.userId = +token;
-
       res.upgrade(
-        [{ uniqueKey: req.getHeader("sec-websocket-key") }],
+        [{ userId: +token, uniqueKey: req.getHeader("sec-websocket-key") }],
         req.getHeader("sec-websocket-key"),
         req.getHeader("sec-websocket-protocol"),
         req.getHeader("sec-websocket-extensions"),
@@ -32,11 +41,18 @@ export class Methods extends User {
     }
   }
 
-  protected connect(_: WS.WebSocket): void {
+  protected connect(ws: WS.WebSocket): void {
+    const id = ws["0"].userId;
+    const user = new User(id);
+
+    listUsers.set(id, user);
     logger.log(`New user connected`);
   }
 
-  protected disconnect(_: WS.WebSocket): void {
+  protected disconnect(ws: WS.WebSocket): void {
+    const id = ws["0"].userId;
+
+    listUsers.delete(id);
     logger.log(`User disconected`);
   }
 }

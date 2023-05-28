@@ -16,7 +16,7 @@ export class Server extends Methods {
       idleTimeout: 60,
       upgrade: this.handshake,
       open: this.connect,
-      message: this.events,
+      message: this.messages,
       close: this.disconnect,
     });
   }

@@ -2,22 +2,14 @@ import WS from "uWebSockets.js";
 
 import { logger } from "@app/libs";
 import { sending } from "@app/utils";
-import { startApp, ping, errorEvent } from "@app/events";
-import { START_APP, PING } from "@app/constants";
+import { startApp, ping, errorEvent, online } from "@app/events";
+import { START_APP, PING, ONLINE } from "@app/constants";
 
 export class User {
-  constructor() {
-    this.userId = undefined;
-  }
+  private userId: number;
 
-  get userId() {
-    return this.userId;
-  }
-
-  set userId(value: number | undefined) {
-    if (!value && Number(value) >= 1) {
-      this.userId = value;
-    }
+  constructor(userId: number) {
+    this.userId = userId;
   }
 
   public events(
@@ -26,9 +18,8 @@ export class User {
     _isBinary: boolean
   ) {
     // ! Add rate limiter
-    console.log(socket["0"].uniqueKey);
+    console.log(this.userId);
 
-    if (!this.userId) return socket.end(Number(process.env.CODE_ERROR_AUTH));
     const msg = JSON.parse(Buffer.from(message).toString());
     const send = sending(socket);
 
@@ -39,6 +30,9 @@ export class User {
           break;
         case START_APP:
           startApp(send)();
+          break;
+        case ONLINE:
+          online(send)();
           break;
         default:
           errorEvent(send, socket)();
