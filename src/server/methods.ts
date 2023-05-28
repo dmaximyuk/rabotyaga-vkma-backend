@@ -28,7 +28,7 @@ export class Methods {
     const token = req.getHeader("token");
     console.log(token);
 
-    if (token === "1234") {
+    if (token === "1234" || token === "4321") {
       res.upgrade(
         [{ userId: +token, uniqueKey: req.getHeader("sec-websocket-key") }],
         req.getHeader("sec-websocket-key"),
