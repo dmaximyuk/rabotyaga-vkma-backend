@@ -1,6 +1,6 @@
 import WS, { HttpRequest, HttpResponse } from "uWebSockets.js";
 
-import { logger } from "@app/libs/logger";
+import { logger, vkSign } from "@app/libs";
 import { User } from "@app/modules";
 
 export class Methods {
@@ -24,10 +24,12 @@ export class Methods {
     req: HttpRequest,
     ctx: WS.us_socket_context_t
   ) {
-    // ! TODO: add check token
     const token = req.getHeader("token");
-    console.log(token);
+    const isUserAuthenticated = vkSign(String(process.env.APP_KEY), token);
 
+    console.log(isUserAuthenticated);
+
+    // ! TODO: add isUserAuthenticated check in auth
     if (token === "1234" || token === "4321") {
       res.upgrade(
         [{ userId: +token, uniqueKey: req.getHeader("sec-websocket-key") }],
