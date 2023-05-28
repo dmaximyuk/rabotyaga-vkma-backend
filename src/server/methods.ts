@@ -21,7 +21,7 @@ export class Methods extends User {
       this.userId = +token;
 
       res.upgrade(
-        [],
+        [{ uniqueKey: req.getHeader("sec-websocket-key") }],
         req.getHeader("sec-websocket-key"),
         req.getHeader("sec-websocket-protocol"),
         req.getHeader("sec-websocket-extensions"),

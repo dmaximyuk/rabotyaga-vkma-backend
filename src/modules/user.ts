@@ -2,7 +2,8 @@ import WS from "uWebSockets.js";
 
 import { logger } from "@app/libs";
 import { sending } from "@app/utils";
-import { startApp } from "@app/events";
+import { startApp, ping, errorEvent } from "@app/events";
+import { START_APP, PING } from "@app/constants";
 
 export class User {
   constructor() {
@@ -24,21 +25,23 @@ export class User {
     message: ArrayBuffer,
     _isBinary: boolean
   ) {
-    if (!this.userId)
-      return logger.error(`user id is not setted: ${this.userId}`);
+    // ! Add rate limiter
+    console.log(socket["0"].uniqueKey);
+
+    if (!this.userId) return socket.end(Number(process.env.CODE_ERROR_AUTH));
     const msg = JSON.parse(Buffer.from(message).toString());
     const send = sending(socket);
 
     try {
       switch (msg.type) {
-        case "PING":
-          send("PONG", { msg: "ok", id: this.userId || 0 });
+        case PING:
+          ping(send)();
           break;
-        case "START_APP":
-          startApp(send);
+        case START_APP:
+          startApp(send)();
           break;
         default:
-          send("ERR_EVENT", { msg: "ok" });
+          errorEvent(send, socket)();
           break;
       }
     } catch (e) {
