@@ -31,19 +31,14 @@ export class Server {
   }
 
   private connect = (ws: WS.WebSocket): void => {
-    const query = ws.query;
-    const queryParams = new URLSearchParams(query);
-    const token = queryParams.get("token");
-    const userId = queryParams.get("userId");
-
-    console.log("Получен токен:", token);
-    console.log("Идентификатор пользователя:", userId);
-    ws.send("Добро пожаловать!");
-    logger.log("connect", ws);
+    console.log(ws.__proto__);
+    const token = ws.getHeader("token");
+    logger.server(`Получен токен: ${token}`);
+    logger.log(`connect ${ws}`);
   };
 
   private disconnect = (ws: WS.WebSocket): void => {
-    logger.log("disconnect", ws);
+    logger.log(`disconnect ${ws}`);
   };
 
   private events = (
