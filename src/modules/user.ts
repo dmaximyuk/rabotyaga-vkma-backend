@@ -2,6 +2,7 @@ import WS from "uWebSockets.js";
 
 import { logger } from "@app/libs";
 import { sending } from "@app/utils";
+import { startApp } from "@app/events";
 
 export class User {
   constructor() {
@@ -30,10 +31,12 @@ export class User {
 
     try {
       switch (msg.type) {
-        case "PING": {
+        case "PING":
           send("PONG", { msg: "ok", id: this.userId || 0 });
           break;
-        }
+        case "START_APP":
+          startApp(send);
+          break;
         default:
           send("ERR_EVENT", { msg: "ok" });
           break;
