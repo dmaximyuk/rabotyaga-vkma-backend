@@ -1,7 +1,7 @@
 import WS, { HttpRequest, HttpResponse } from "uWebSockets.js";
 
 import { logger } from "@app/libs";
-import { send } from "@app/utils";
+import { sending } from "@app/utils";
 
 export class Methods {
   protected handshake(
@@ -43,7 +43,9 @@ export class Methods {
   protected events(socket: WS.WebSocket, msg: ArrayBuffer, _isBinary: boolean) {
     try {
       const event = Buffer.from(msg).toString();
-      return send(socket, "MSG", JSON.parse(event));
+      const send = sending(socket);
+
+      return send("MSG", JSON.parse(event));
     } catch (e) {
       return logger.error(e);
     }
