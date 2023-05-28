@@ -3,53 +3,53 @@ import "moment/locale/ru";
 
 import { connectionDatabase } from "./modules";
 import { userSchema } from "./scheme";
-import { TUserDataHydratedDocument } from "@app/engine/types";
+// import { UserModelHydratedDocument } from "@app/engine/types";
 
 moment.locale("ru");
 
 connectionDatabase("rabotyaga");
 
-class Database {
-  private maxBalance: number;
-  private maxExp: number;
-  private maxVersion: number;
-
-  constructor() {
-    this.maxBalance = 1_000_000_000_000;
-    this.maxExp = 1_000_000;
-    this.maxVersion = 1_000;
-  }
-
-  get() {
-    return {
-      user: async (id: number) => {
-        return await userSchema.findOne({ id: id });
-      },
-      rating: async () => {
-        return [{ id: 123, name: "Dmitriy" }];
-      },
-    };
-  }
-
-  set() {
-    return {
-      user: async (id: number, data: TUserDataHydratedDocument) => {
-        const isVerificateData = this.dataVerification(data);
-        return await userSchema.findOneAndUpdate({ id: id }, isVerificateData);
-      },
-    };
-  }
-
-  private dataVerification = (
-    data: TUserDataHydratedDocument
-  ): TUserDataHydratedDocument => {
-    if (data.balance >= this.maxBalance) data.balance = this.maxBalance;
-    if (data.exp >= this.maxExp) data.exp = this.maxExp;
-    if (data.__v >= this.maxVersion) data.__v = this.maxVersion;
-
-    ++data.__v;
-    return data;
-  };
+declare global {
+  var database: Database;
 }
 
-export default Database;
+export class Database {
+  // private maxBalance: number;
+  // private maxExp: number;
+  // private maxVersion: number;
+
+  constructor() {
+    // this.maxBalance = 1_000_000_000_000;
+    // this.maxExp = 1_000_000;
+    // this.maxVersion = 1_000;
+  }
+
+  public async getUser(id: number) {
+    // ! TODO: Add create user
+    const user = await userSchema.findOne({ id: id });
+
+    if (!user) {
+      const data = await userSchema.create({ id: id });
+
+      console.log(data);
+    }
+  }
+
+  public async updateUser(
+    id: number,
+    data: { [key: string]: number | string }
+  ) {
+    return await userSchema.findOneAndUpdate({ id: id }, data);
+  }
+
+  // private dataVerification = (
+  //   data: UserModelHydratedDocument
+  // ): UserModelHydratedDocument => {
+  //   if (data.balance >= this.maxBalance) data.balance = this.maxBalance;
+  //   if (data.exp >= this.maxExp) data.exp = this.maxExp;
+  //   if (data.__v >= this.maxVersion) data.__v = this.maxVersion;
+
+  //   ++data.__v;
+  //   return data;
+  // };
+}

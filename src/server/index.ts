@@ -1,6 +1,6 @@
 import WS from "uWebSockets.js";
 
-import { logger } from "@app/libs";
+import { logger } from "@app/libs/logger";
 import { Methods } from "@app/server/methods";
 
 export class Server extends Methods {

@@ -1,7 +1,6 @@
 import WS from "uWebSockets.js";
 
-import { logger } from "@app/libs";
-import { sending } from "@app/utils";
+import { sending, logger } from "@app/libs";
 import { startApp, ping, errorEvent, online } from "@app/events";
 import { START_APP, PING, ONLINE } from "@app/constants";
 

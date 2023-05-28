@@ -1,6 +1,6 @@
 import WS, { HttpRequest, HttpResponse } from "uWebSockets.js";
 
-import { logger } from "@app/libs";
+import { logger } from "@app/libs/logger";
 import { User } from "@app/modules";
 
 export class Methods {

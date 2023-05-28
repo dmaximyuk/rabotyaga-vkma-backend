@@ -1,8 +1,7 @@
 import type { ParsedUrlQuery } from "querystring";
 import type { HydratedDocument } from "mongoose";
-import type { WebSocket } from "uWebSockets.js";
 
-export type TVKSign =
+export type VKSignModel =
   | {
       auth: true;
       data: ParsedUrlQuery & {
@@ -24,7 +23,7 @@ export type TVKSign =
       data: undefined;
     };
 
-export interface IUserData {
+export interface UserModel {
   id: number;
   checkin: string;
   exp: number;
@@ -36,39 +35,9 @@ export interface IUserData {
   };
 }
 
-export type TOperationType = "JOB" | "BUSINESS" | "";
-export type TOperationVarian = "GET" | "SET" | "TRANSFER" | "TRANSFER" | "";
-export type TUserDataHydratedDocument = HydratedDocument<IUserData>;
-export type TLog = HydratedDocument<{
+export type UserModelHydratedDocument = HydratedDocument<UserModel>;
+export type LogModel = HydratedDocument<{
   user_id: number;
-  type: TOperationType;
+  type: string;
   value: "GET" | "SELL" | "BUY" | "";
 }>;
-export type TEvents = "START_APP" | "TOKEN";
-export type TClientEvents = "START_APP" | "TOKEN" | "LIMITER" | "SERVER_ERR";
-export type TSender = {
-  ws: WebSocket;
-  sender: Function;
-};
-export type SendFunctionModel = (
-  ws: WebSocket,
-  options: {
-    type: TClientEvents;
-    params: object;
-    isBinary: boolean;
-  }
-) => void;
-
-export interface ActionsModel {
-  ({
-    socket,
-    send,
-    event,
-    isBinary,
-  }: {
-    socket: WebSocket;
-    send: SendFunctionModel;
-    event: TEvents;
-    isBinary: boolean;
-  }): void;
-}
