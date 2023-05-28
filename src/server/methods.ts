@@ -18,13 +18,10 @@ export class Methods extends User {
     console.log(token);
 
     if (token === "1234") {
-      const params = {
-        id: 1,
-        token: token,
-      };
+      this.userId = +token;
 
       res.upgrade(
-        [params],
+        [],
         req.getHeader("sec-websocket-key"),
         req.getHeader("sec-websocket-protocol"),
         req.getHeader("sec-websocket-extensions"),
@@ -35,8 +32,7 @@ export class Methods extends User {
     }
   }
 
-  protected connect(ws: WS.WebSocket): void {
-    console.log(ws);
+  protected connect(_: WS.WebSocket): void {
     logger.log(`New user connected`);
   }
 
