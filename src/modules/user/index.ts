@@ -1,8 +1,9 @@
+import WS from "uWebSockets.js";
+
 import { logger } from "@app/libs";
+import { sending } from "@app/utils";
 
-import { IActions } from "@app/engine/types/index";
-
-class User {
+export class User {
   public id: undefined | number;
 
   constructor() {
@@ -23,33 +24,20 @@ class User {
     };
   }
 
-  public actions: IActions = ({ socket, send, event, isBinary }) => {
+  public events(
+    socket: WS.WebSocket,
+    msg: ArrayBuffer,
+    _isBinary: boolean
+  ): void {
+    const event = Buffer.from(msg).toString();
+    const send = sending(socket);
+
     try {
-      switch (event) {
-        // ? maybe is not need?
-        // ? case "TOKEN":
-        // ?  return send(socket, {
-        // ?   type: event,
-        // ?    params: { id: 123, name: "Dmitriy" },
-        // ?    isBinary,
-        // ?  });
-        case "START_APP":
-          return send(socket, {
-            type: event,
-            params: { id: 123 },
-            isBinary,
-          });
-        default:
-          return send(socket, {
-            type: "SERVER_ERR",
-            params: { id: 123 },
-            isBinary,
-          });
-      }
+      // switch (event) {
+      // }
+      send("MSG", JSON.parse(event));
     } catch (e) {
       logger.error(e);
     }
-  };
+  }
 }
-
-export default User;

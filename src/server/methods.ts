@@ -1,9 +1,13 @@
 import WS, { HttpRequest, HttpResponse } from "uWebSockets.js";
 
 import { logger } from "@app/libs";
-import { sending } from "@app/utils";
+import { User } from "@app/modules";
 
-export class Methods {
+export class Methods extends User {
+  constructor() {
+    super();
+  }
+
   protected handshake(
     res: HttpResponse,
     req: HttpRequest,
@@ -38,16 +42,5 @@ export class Methods {
 
   protected disconnect(_: WS.WebSocket): void {
     logger.log(`User disconected`);
-  }
-
-  protected events(socket: WS.WebSocket, msg: ArrayBuffer, _isBinary: boolean) {
-    try {
-      const event = Buffer.from(msg).toString();
-      const send = sending(socket);
-
-      return send("MSG", JSON.parse(event));
-    } catch (e) {
-      return logger.error(e);
-    }
   }
 }
