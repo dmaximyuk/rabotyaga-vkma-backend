@@ -1,6 +1,5 @@
-import { Server } from "./server";
 import database from "./database";
 import logger from "./logger";
 import generateParams from "./generateParams";
 
-export { database, logger, generateParams, Server };
+export { database, logger, generateParams };
