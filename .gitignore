@@ -2,6 +2,8 @@ node_modules
 coverage
 build
 dist
+.idea
+.vscode
 
 package-lock.json
 yarn-error.txt
