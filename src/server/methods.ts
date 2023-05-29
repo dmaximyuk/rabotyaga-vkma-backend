@@ -47,7 +47,9 @@ export class Methods {
   }
 
   protected connect(ws: WS.WebSocket): void {
-    const id = ws["0"].userId;
+    const id: number | undefined = ws["0"]?.userId;
+    if (!id) return ws.close();
+
     const user = new User(id);
 
     listUsers.set(id, user);
@@ -55,9 +57,9 @@ export class Methods {
   }
 
   protected disconnect(ws: WS.WebSocket): void {
-    const id = ws["0"].userId;
+    const id = ws["0"]?.userId;
 
     listUsers.delete(id);
-    logger.log(`User disconected`);
+    logger.log(`User disconnected`);
   }
 }
