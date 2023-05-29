@@ -11,16 +11,10 @@ export class User {
     this.userId = userId;
   }
 
-  public events(
-    socket: WS.WebSocket,
-    message: ArrayBuffer,
-    _isBinary: boolean
-  ) {
-    // ! Add rate limiter
-    console.log(this.userId);
-
+  public events(socket: WS.WebSocket, message: ArrayBuffer, _isBinary: boolean) {
     const msg = JSON.parse(Buffer.from(message).toString());
     const send = sending(socket);
+    console.log(this.userId);
 
     try {
       switch (msg.type) {
